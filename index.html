@@ -1,0 +1,3188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ Notes</title>
+<style>
+body {
+  font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+  line-height: 1.7;
+  color: #c9d1d9;
+  background: #161b22;
+}
+@media (min-width: 1201px) {
+  body {
+    margin-left: max(320px, calc((100vw - 840px) / 2));
+    margin-right: 0;
+  }
+}
+h1,h2,h3,h4,h5,h6 { margin-top: 24px; margin-bottom: 12px; color: #e6edf3; }
+h1 { font-size: 2em; border-bottom: 2px solid #30363d; padding-bottom: 8px; }
+h2 { font-size: 1.6em; border-bottom: 1px solid #30363d; padding-bottom: 6px; }
+
+code {
+  background: #30363d;
+  color: #e6edf3;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: SF Mono, Fira Code, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
+pre {
+  background: #0d1117;
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  border: 1px solid #30363d;
+}
+pre code {
+  background: transparent;
+  color: #c9d1d9;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+blockquote {
+  border-left: 4px solid #58a6ff;
+  background: #1c2128;
+  padding: 12px 16px;
+  margin: 16px 0;
+  border-radius: 0 6px 6px 0;
+  color: #8b949e;
+}
+
+table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+th,td { border: 1px solid #30363d; padding: 10px 14px; text-align: left; }
+th { background: #1c2128; color: #e6edf3; }
+td { color: #c9d1d9; }
+
+img { max-width: 100%; border-radius: 6px; }
+svg { max-width: 100%; height: auto; }
+
+mark { background: #9e6a03; color: #e6edf3; padding: 1px 4px; border-radius: 3px; }
+
+a { color: #58a6ff; }
+a:hover { color: #79c0ff; }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #161b22; }
+::-webkit-scrollbar-thumb { background: #30363d; border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: #484f58; }
+
+pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}
+.hljs{color:#c9d1d9;background:#0d1117}.hljs-doctag,.hljs-keyword,.hljs-meta .hljs-keyword,.hljs-template-tag,.hljs-template-variable,.hljs-type,.hljs-variable.language_{color:#ff7b72}.hljs-title,.hljs-title.class_,.hljs-title.class_.inherited__,.hljs-title.function_{color:#d2a8ff}.hljs-attr,.hljs-attribute,.hljs-literal,.hljs-meta,.hljs-number,.hljs-operator,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-variable{color:#79c0ff}.hljs-meta .hljs-string,.hljs-regexp,.hljs-string{color:#a5d6ff}.hljs-built_in,.hljs-symbol{color:#ffa657}.hljs-code,.hljs-comment,.hljs-formula{color:#8b949e}.hljs-name,.hljs-quote,.hljs-selector-pseudo,.hljs-selector-tag{color:#7ee787}.hljs-subst{color:#c9d1d9}.hljs-section{color:#1f6feb;font-weight:700}.hljs-bullet{color:#f2cc60}.hljs-emphasis{color:#c9d1d9;font-style:italic}.hljs-strong{color:#c9d1d9;font-weight:700}.hljs-addition{color:#aff5b4;background-color:#033a16}.hljs-deletion{color:#ffdcd7;background-color:#67060c}
+</style>
+</head>
+<body>
+
+<!-- ================= 正文内容开始 ================= -->
+<h1>数据类型及范围</h1><pre><code class="hljs language-cpp"><span class="hljs-type">bool</span>	<span class="hljs-number">1</span> 个字节	<span class="hljs-number">0</span> 或 <span class="hljs-number">1</span>
+
+<span class="hljs-type">char</span>	<span class="hljs-number">1</span> 个字节	<span class="hljs-number">-128</span> 到 <span class="hljs-number">127</span> 或者 <span class="hljs-number">0</span> 到 <span class="hljs-number">255</span>
+
+<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>	<span class="hljs-number">1</span> 个字节	<span class="hljs-number">0</span> 到 <span class="hljs-number">255</span>
+
+<span class="hljs-type">signed</span> <span class="hljs-type">char</span>	<span class="hljs-number">1</span> 个字节	<span class="hljs-number">-128</span> 到 <span class="hljs-number">127</span>
+
+<span class="hljs-type">int</span>	<span class="hljs-number">4</span> 个字节	<span class="hljs-number">-2147483648</span> 到 <span class="hljs-number">2147483647</span>
+
+<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>	<span class="hljs-number">4</span> 个字节	<span class="hljs-number">0</span> 到 <span class="hljs-number">4294967295</span>
+
+<span class="hljs-type">signed</span> <span class="hljs-type">int</span>	<span class="hljs-number">4</span> 个字节	<span class="hljs-number">-2147483648</span> 到 <span class="hljs-number">2147483647</span>
+
+<span class="hljs-type">short</span> <span class="hljs-type">int</span>	<span class="hljs-number">2</span> 个字节	<span class="hljs-number">-32768</span> 到 <span class="hljs-number">32767</span>
+
+<span class="hljs-type">unsigned</span> <span class="hljs-type">short</span> <span class="hljs-type">int</span>	<span class="hljs-number">2</span> 个字节	<span class="hljs-number">0</span> 到 <span class="hljs-number">65</span>,<span class="hljs-number">535</span>
+
+<span class="hljs-type">signed</span> <span class="hljs-type">short</span> <span class="hljs-type">int</span>	<span class="hljs-number">2</span> 个字节	<span class="hljs-number">-32768</span> 到 <span class="hljs-number">32767</span>
+
+<span class="hljs-type">long</span> <span class="hljs-type">int</span>	<span class="hljs-number">8</span> 个字节	<span class="hljs-number">-9</span>,<span class="hljs-number">223</span>,<span class="hljs-number">372</span>,<span class="hljs-number">036</span>,<span class="hljs-number">854</span>,<span class="hljs-number">775</span>,<span class="hljs-number">808</span> 到 <span class="hljs-number">9</span>,<span class="hljs-number">223</span>,<span class="hljs-number">372</span>,<span class="hljs-number">036</span>,<span class="hljs-number">854</span>,<span class="hljs-number">775</span>,<span class="hljs-number">807</span>
+
+<span class="hljs-type">signed</span> <span class="hljs-type">long</span> <span class="hljs-type">int</span>	<span class="hljs-number">8</span> 个字节	<span class="hljs-number">-9</span>,<span class="hljs-number">223</span>,<span class="hljs-number">372</span>,<span class="hljs-number">036</span>,<span class="hljs-number">854</span>,<span class="hljs-number">775</span>,<span class="hljs-number">808</span> 到 <span class="hljs-number">9</span>,<span class="hljs-number">223</span>,<span class="hljs-number">372</span>,<span class="hljs-number">036</span>,<span class="hljs-number">854</span>,<span class="hljs-number">775</span>,<span class="hljs-number">807</span>
+
+<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">int</span>	<span class="hljs-number">8</span> 个字节	<span class="hljs-number">0</span> 到 <span class="hljs-number">18</span>,<span class="hljs-number">446</span>,<span class="hljs-number">744</span>,<span class="hljs-number">073</span>,<span class="hljs-number">709</span>,<span class="hljs-number">551</span>,<span class="hljs-number">615</span>
+
+<span class="hljs-type">float</span>	<span class="hljs-number">4</span> 个字节	精度型占<span class="hljs-number">4</span>个字节（<span class="hljs-number">32</span>位）内存空间，+/- <span class="hljs-number">3.4</span>e +/- <span class="hljs-number">38</span> (~<span class="hljs-number">7</span> 个数字)
+
+<span class="hljs-type">double</span>	<span class="hljs-number">8</span> 个字节	双精度型占<span class="hljs-number">8</span> 个字节（<span class="hljs-number">64</span>位）内存空间，+/- <span class="hljs-number">1.7</span>e +/- <span class="hljs-number">308</span> (~<span class="hljs-number">15</span> 个数字)
+
+<span class="hljs-type">long</span> <span class="hljs-type">double</span>	<span class="hljs-number">16</span> 个字节	长双精度型 <span class="hljs-number">16</span> 个字节（<span class="hljs-number">128</span>位）内存空间，可提供<span class="hljs-number">18</span><span class="hljs-number">-19</span>位有效数字。
+
+<span class="hljs-type">wchar_t</span>	<span class="hljs-number">2</span> 或 <span class="hljs-number">4</span> 个字节	<span class="hljs-number">1</span> 个宽字符</code></pre><h1>数学函数</h1><pre><code class="hljs language-cpp"><span class="hljs-built_in">abs</span>(a)    a的绝对值
+<span class="hljs-built_in">pow</span>(x, y)    x的y次方
+<span class="hljs-built_in">sqrt</span>(a)    a的平方根
+<span class="hljs-built_in">floor</span>(a)    向下取整
+<span class="hljs-built_in">ceil</span>(a)    向上取整
+<span class="hljs-built_in">round</span>(a)    四舍五入</code></pre><h1>格式控制符</h1><pre><code class="hljs language-cpp"><span class="hljs-type">char</span> ---- %c
+<span class="hljs-type">int</span> ---- %d
+<span class="hljs-type">long</span> <span class="hljs-type">long</span> ---- %lld
+<span class="hljs-type">float</span> ---- %<span class="hljs-built_in">f</span>    (默认<span class="hljs-number">6</span>位)
+<span class="hljs-type">double</span> ---- %<span class="hljs-built_in">lf</span>    (默认<span class="hljs-number">6</span>位)
+<span class="hljs-type">float</span> ---- %._(小数位数)f
+<span class="hljs-type">double</span> ---- %._(小数位数)lf</code></pre><h1>排序</h1><h2>冒泡</h2><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">bubbleSort</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-type">bool</span> f = <span class="hljs-number">0</span>;
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n - <span class="hljs-number">1</span>; i++)
+    {
+        f = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; n - <span class="hljs-number">1</span> - i; j++)
+        {
+            <span class="hljs-keyword">if</span> (a[j] &gt; a[j + <span class="hljs-number">1</span>])
+            {
+                <span class="hljs-built_in">swap</span>(a[j + <span class="hljs-number">1</span>], a[j]);
+                f = <span class="hljs-number">1</span>;
+            }
+        }
+
+        <span class="hljs-keyword">if</span> (!f)
+        {
+            <span class="hljs-keyword">return</span>;
+        }
+    }
+}
+</code></pre><h2>选择</h2><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">selectSort</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-type">int</span> mi, t;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n - <span class="hljs-number">1</span>; i++)
+    {
+        mi = i;
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = i + <span class="hljs-number">1</span>; j &lt; n; j++)
+        {
+            <span class="hljs-keyword">if</span> (a[j] &lt; a[mi])
+            {
+                mi = j;
+            }
+        }
+        <span class="hljs-keyword">if</span> (mi != i)
+        {
+            t = a[mi];
+            a[mi] = a[i];
+            a[i] = t;
+        }
+    }
+}</code></pre><h2>插入</h2><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">insertSort</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-type">int</span> i, j, t;
+    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">1</span>; i &lt; n; i++)
+    {
+        t = a[i];
+        <span class="hljs-keyword">for</span> (j = i; j &gt; <span class="hljs-number">0</span> &amp;&amp; a[j - <span class="hljs-number">1</span>] &gt; t; j--)
+            a[j] = a[j - <span class="hljs-number">1</span>];
+        a[j] = t;
+    }
+}</code></pre><h2>归并</h2><pre><code class="hljs language-cpp"><span class="hljs-type">int</span> a[<span class="hljs-number">500002</span>];
+<span class="hljs-type">int</span> tmp[<span class="hljs-number">500002</span>];
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">merge</span><span class="hljs-params">(<span class="hljs-type">int</span> l, <span class="hljs-type">int</span> m, <span class="hljs-type">int</span> r)</span>
+</span>{
+    <span class="hljs-type">int</span> i = l, j = m + <span class="hljs-number">1</span>, k = l;
+    <span class="hljs-keyword">while</span> (i &lt;= m &amp;&amp; j &lt;= r)
+    {
+        <span class="hljs-keyword">if</span> (a[i] &lt;= a[j])
+            tmp[k++] = a[i++];
+        <span class="hljs-keyword">else</span>
+            tmp[k++] = a[j++];
+    }
+    <span class="hljs-keyword">while</span> (i &lt;= m)
+        tmp[k++] = a[i++];
+    <span class="hljs-keyword">while</span> (j &lt;= r)
+        tmp[k++] = a[j++];
+    <span class="hljs-keyword">for</span> (i = l; i &lt;= r; i++)
+        a[i] = tmp[i];
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">merge_sort</span><span class="hljs-params">(<span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (l == r)
+        <span class="hljs-keyword">return</span>;
+    <span class="hljs-type">int</span> m = (l + r) / <span class="hljs-number">2</span>;
+    <span class="hljs-built_in">merge_sort</span>(l, m);
+    <span class="hljs-built_in">merge_sort</span>(m + <span class="hljs-number">1</span>, r);
+    <span class="hljs-built_in">merge</span>(l, m, r);
+}</code></pre><h2>快速</h2><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">quickSort</span><span class="hljs-params">(<span class="hljs-type">int</span> a[], <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span>
+</span>{
+    <span class="hljs-type">int</span> i, j, t, p;
+    <span class="hljs-keyword">if</span> (l &gt; r)
+        <span class="hljs-keyword">return</span>;
+    p = a[l];
+    i = l;
+    j = r;
+    <span class="hljs-keyword">while</span> (i != j)
+    {
+        <span class="hljs-keyword">while</span> (a[j] &gt;= p &amp;&amp; i &lt; j)
+            j--;
+        <span class="hljs-keyword">while</span> (a[i] &lt;= p &amp;&amp; i &lt; j)
+            i++;
+        <span class="hljs-keyword">if</span> (i &lt; j)
+        {
+            t = a[i];
+            a[i] = a[j];
+            a[j] = t;
+        }
+    }
+    a[l] = a[i];
+    a[i] = p;
+    <span class="hljs-built_in">quickSort</span>(a, l, i - <span class="hljs-number">1</span>);
+    <span class="hljs-built_in">quickSort</span>(a, i + <span class="hljs-number">1</span>, r);
+}</code></pre><h1>二分查找模板</h1><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">binary_search</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-type">int</span> l = <span class="hljs-number">0</span>, r = n - <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">while</span> (l &lt;= r)
+    {
+        <span class="hljs-type">int</span> mid = l + (r - l) / <span class="hljs-number">2</span>;
+        <span class="hljs-keyword">if</span> (a[mid] &lt; tar)
+        {
+            l = mid + <span class="hljs-number">1</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (a[mid] &gt; tar)
+        {
+            r = mid - <span class="hljs-number">1</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (a[mid] == tar)
+        {
+            <span class="hljs-keyword">return</span> mid;
+        }
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
+}</code></pre><h1>左值查找模板</h1><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">left_bound</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-type">int</span> l = <span class="hljs-number">0</span>, r = n - <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">while</span> (l &lt;= r)
+    {
+        <span class="hljs-type">int</span> mid = l + (r - l) / <span class="hljs-number">2</span>;
+        <span class="hljs-keyword">if</span> (a[mid] &lt; tar)
+        {
+            l = mid + <span class="hljs-number">1</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (a[mid] &gt; tar)
+        {
+            r = mid - <span class="hljs-number">1</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (a[mid] == tar)
+        {
+            r = mid - <span class="hljs-number">1</span>;
+        }
+    }
+    <span class="hljs-keyword">if</span> (l &gt;= n || a[l] != tar)
+        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
+    <span class="hljs-keyword">return</span> l;
+}</code></pre><h1>右值查找模板</h1><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">right_bound</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-type">int</span> l = <span class="hljs-number">0</span>, r = n - <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">while</span> (l &lt;= r)
+    {
+        <span class="hljs-type">int</span> mid = l + (r - l) / <span class="hljs-number">2</span>;
+        <span class="hljs-keyword">if</span> (a[mid] &lt; tar)
+        {
+            l = mid + <span class="hljs-number">1</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (a[mid] &gt; tar)
+        {
+            r = mid - <span class="hljs-number">1</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (a[mid] == tar)
+        {
+            l = mid + <span class="hljs-number">1</span>;
+        }
+    }
+    <span class="hljs-keyword">if</span> (r &lt; <span class="hljs-number">0</span> || a[r] != tar)
+        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
+    <span class="hljs-keyword">return</span> r;
+}</code></pre><h1>STL常用函数</h1><h2>string</h2><pre><code class="hljs language-cpp">string s = <span class="hljs-string">"hello"</span>;
+
+s.<span class="hljs-built_in">size</span>();          <span class="hljs-comment">// 长度</span>
+s.<span class="hljs-built_in">empty</span>();         <span class="hljs-comment">// 是否为空</span>
+s.<span class="hljs-built_in">clear</span>();         <span class="hljs-comment">// 清空</span>
+
+s += <span class="hljs-string">'a'</span>;          <span class="hljs-comment">// 尾接字符</span>
+s += <span class="hljs-string">"world"</span>;      <span class="hljs-comment">// 尾接字符串</span>
+s.<span class="hljs-built_in">append</span>(<span class="hljs-string">"abc"</span>);   <span class="hljs-comment">// 同上</span>
+s.<span class="hljs-built_in">push_back</span>(<span class="hljs-string">'x'</span>);  <span class="hljs-comment">// 尾接字符（和 += 一样）</span>
+
+s.<span class="hljs-built_in">substr</span>(<span class="hljs-number">1</span>, <span class="hljs-number">3</span>);    <span class="hljs-comment">// 从下标 1 开始取 3 个字符</span>
+s.<span class="hljs-built_in">find</span>(<span class="hljs-string">"ll"</span>);      <span class="hljs-comment">// 查找，返回下标，找不到返回 string::npos</span>
+s.<span class="hljs-built_in">rfind</span>(<span class="hljs-string">"l"</span>);      <span class="hljs-comment">// 从右往左找</span>
+s.<span class="hljs-built_in">find</span>(<span class="hljs-string">'l'</span>, <span class="hljs-number">3</span>);    <span class="hljs-comment">// 从下标 3 开始找</span>
+
+s.<span class="hljs-built_in">insert</span>(<span class="hljs-number">1</span>, <span class="hljs-string">"xx"</span>); <span class="hljs-comment">// 在下标 1 插入</span>
+s.<span class="hljs-built_in">erase</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>);     <span class="hljs-comment">// 从下标 1 删除 2 个字符</span>
+s.<span class="hljs-built_in">replace</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-string">"yy"</span>); <span class="hljs-comment">// 下标 1 起 2 个字符替换成 "yy"</span>
+
+s.<span class="hljs-built_in">begin</span>(), s.<span class="hljs-built_in">end</span>();<span class="hljs-comment">// 迭代器</span>
+<span class="hljs-built_in">reverse</span>(s.<span class="hljs-built_in">begin</span>(), s.<span class="hljs-built_in">end</span>()); <span class="hljs-comment">// 翻转</span>
+
+<span class="hljs-built_in">stoi</span>(s);           <span class="hljs-comment">// string -&gt; int</span>
+<span class="hljs-built_in">stoll</span>(s);          <span class="hljs-comment">// string -&gt; long long</span>
+<span class="hljs-built_in">to_string</span>(<span class="hljs-number">123</span>);    <span class="hljs-comment">// int -&gt; string</span>
+
+s[<span class="hljs-number">0</span>];              <span class="hljs-comment">// 下标访问（不检查越界）</span>
+s.<span class="hljs-built_in">at</span>(<span class="hljs-number">0</span>);           <span class="hljs-comment">// 下标访问（检查越界，抛异常）</span></code></pre><h2>vector</h2><pre><code class="hljs language-cpp">vector&lt;<span class="hljs-type">int</span>&gt; v;
+
+v.<span class="hljs-built_in">size</span>();          <span class="hljs-comment">// 元素个数</span>
+v.<span class="hljs-built_in">empty</span>();         <span class="hljs-comment">// 是否为空</span>
+v.<span class="hljs-built_in">clear</span>();         <span class="hljs-comment">// 清空</span>
+
+v.<span class="hljs-built_in">push_back</span>(<span class="hljs-number">1</span>);    <span class="hljs-comment">// 尾插</span>
+v.<span class="hljs-built_in">pop_back</span>();      <span class="hljs-comment">// 尾删</span>
+v.<span class="hljs-built_in">back</span>();          <span class="hljs-comment">// 最后一个元素</span>
+v.<span class="hljs-built_in">front</span>();         <span class="hljs-comment">// 第一个元素</span>
+
+v[<span class="hljs-number">0</span>];              <span class="hljs-comment">// 下标访问</span>
+v.<span class="hljs-built_in">at</span>(<span class="hljs-number">0</span>);           <span class="hljs-comment">// 带检查的下标访问</span>
+
+v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>();<span class="hljs-comment">// 迭代器</span>
+v.<span class="hljs-built_in">insert</span>(v.<span class="hljs-built_in">begin</span>() + <span class="hljs-number">1</span>, <span class="hljs-number">5</span>);   <span class="hljs-comment">// 在下标 1 插入 5</span>
+v.<span class="hljs-built_in">erase</span>(v.<span class="hljs-built_in">begin</span>() + <span class="hljs-number">1</span>);       <span class="hljs-comment">// 删除下标 1</span>
+v.<span class="hljs-built_in">erase</span>(v.<span class="hljs-built_in">begin</span>() + <span class="hljs-number">1</span>, v.<span class="hljs-built_in">begin</span>() + <span class="hljs-number">3</span>); <span class="hljs-comment">// 删除区间 [1,3)</span>
+
+<span class="hljs-built_in">sort</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>());      <span class="hljs-comment">// 升序</span>
+<span class="hljs-built_in">sort</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>(), <span class="hljs-built_in">greater</span>&lt;<span class="hljs-type">int</span>&gt;()); <span class="hljs-comment">// 降序</span>
+<span class="hljs-built_in">reverse</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>());   <span class="hljs-comment">// 翻转</span>
+
+v.<span class="hljs-built_in">resize</span>(<span class="hljs-number">10</span>);      <span class="hljs-comment">// 改变大小</span>
+v.<span class="hljs-built_in">assign</span>(<span class="hljs-number">5</span>, <span class="hljs-number">0</span>);    <span class="hljs-comment">// 赋值为 5 个 0</span>
+
+<span class="hljs-comment">// 二维</span>
+vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">g</span>(n, <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(m, <span class="hljs-number">0</span>));</code></pre><h2>map / unordered_map</h2><pre><code class="hljs language-cpp">map&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt; mp;          <span class="hljs-comment">// 有序，O(log n)</span>
+unordered_map&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt; ump; <span class="hljs-comment">// 无序，O(1) 平均</span>
+
+mp[<span class="hljs-number">1</span>] = <span class="hljs-number">10</span>;         <span class="hljs-comment">// 插入/修改</span>
+mp.<span class="hljs-built_in">size</span>();
+mp.<span class="hljs-built_in">empty</span>();
+mp.<span class="hljs-built_in">clear</span>();
+
+mp.<span class="hljs-built_in">count</span>(<span class="hljs-number">1</span>);        <span class="hljs-comment">// 是否存在（0 或 1）</span>
+mp.<span class="hljs-built_in">find</span>(<span class="hljs-number">1</span>);         <span class="hljs-comment">// 返回迭代器，找不到返回 mp.end()</span>
+
+mp.<span class="hljs-built_in">erase</span>(<span class="hljs-number">1</span>);        <span class="hljs-comment">// 删除键 1</span>
+mp.<span class="hljs-built_in">erase</span>(mp.<span class="hljs-built_in">begin</span>()); <span class="hljs-comment">// 删除迭代器指向的元素</span>
+
+<span class="hljs-comment">// 遍历</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> &amp;p : mp)
+{
+    cout &lt;&lt; p.first &lt;&lt; <span class="hljs-string">' '</span> &lt;&lt; p.second &lt;&lt; <span class="hljs-string">'\n'</span>;
+}
+
+<span class="hljs-comment">// 迭代器遍历</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> it = mp.<span class="hljs-built_in">begin</span>(); it != mp.<span class="hljs-built_in">end</span>(); it++)
+{
+    cout &lt;&lt; it-&gt;first &lt;&lt; <span class="hljs-string">' '</span> &lt;&lt; it-&gt;second &lt;&lt; <span class="hljs-string">'\n'</span>;
+}
+
+mp.<span class="hljs-built_in">lower_bound</span>(<span class="hljs-number">1</span>);  <span class="hljs-comment">// 第一个 &gt;= 1 的键（map 有，unordered_map 没有）</span>
+mp.<span class="hljs-built_in">upper_bound</span>(<span class="hljs-number">1</span>);  <span class="hljs-comment">// 第一个 &gt; 1 的键</span></code></pre><h2>set / unordered_set / multiset</h2><pre><code class="hljs language-cpp">set&lt;<span class="hljs-type">int</span>&gt; st;               <span class="hljs-comment">// 有序，去重，O(log n)</span>
+multiset&lt;<span class="hljs-type">int</span>&gt; mst;         <span class="hljs-comment">// 有序，不去重</span>
+unordered_set&lt;<span class="hljs-type">int</span>&gt; ust;    <span class="hljs-comment">// 无序，去重，O(1) 平均</span>
+
+st.<span class="hljs-built_in">insert</span>(<span class="hljs-number">1</span>);       <span class="hljs-comment">// 插入</span>
+st.<span class="hljs-built_in">erase</span>(<span class="hljs-number">1</span>);        <span class="hljs-comment">// 删除值 1</span>
+st.<span class="hljs-built_in">erase</span>(st.<span class="hljs-built_in">begin</span>()); <span class="hljs-comment">// 删除迭代器指向的元素</span>
+
+st.<span class="hljs-built_in">count</span>(<span class="hljs-number">1</span>);        <span class="hljs-comment">// 是否存在（0 或 1）</span>
+st.<span class="hljs-built_in">find</span>(<span class="hljs-number">1</span>);         <span class="hljs-comment">// 返回迭代器，找不到返回 st.end()</span>
+
+st.<span class="hljs-built_in">size</span>();
+st.<span class="hljs-built_in">empty</span>();
+st.<span class="hljs-built_in">clear</span>();
+
+<span class="hljs-comment">// 遍历</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> x : st)
+{
+    cout &lt;&lt; x &lt;&lt; <span class="hljs-string">' '</span>;
+}
+
+st.<span class="hljs-built_in">lower_bound</span>(<span class="hljs-number">1</span>);  <span class="hljs-comment">// 第一个 &gt;= 1 的元素（set 有）</span>
+st.<span class="hljs-built_in">upper_bound</span>(<span class="hljs-number">1</span>);  <span class="hljs-comment">// 第一个 &gt; 1 的元素</span>
+
+<span class="hljs-comment">// multiset 删除一个值（只删一个）</span>
+<span class="hljs-keyword">auto</span> it = mst.<span class="hljs-built_in">find</span>(<span class="hljs-number">1</span>);
+<span class="hljs-keyword">if</span> (it != mst.<span class="hljs-built_in">end</span>())
+    mst.<span class="hljs-built_in">erase</span>(it);</code></pre><h2>bitset</h2><pre><code class="hljs language-cpp">bitset&lt;100&gt; bs;          <span class="hljs-comment">// 100 位，默认全 0</span>
+<span class="hljs-function">bitset&lt;8&gt; <span class="hljs-title">bs2</span><span class="hljs-params">(<span class="hljs-number">5</span>)</span></span>;        <span class="hljs-comment">// 0101</span>
+<span class="hljs-function">bitset&lt;8&gt; <span class="hljs-title">bs3</span><span class="hljs-params">(string(<span class="hljs-string">"1010"</span>))</span></span>; <span class="hljs-comment">// 从字符串构造</span>
+
+bs[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;          <span class="hljs-comment">// 下标访问（从低位开始）</span>
+bs.<span class="hljs-built_in">count</span>();         <span class="hljs-comment">// 1 的个数</span>
+bs.<span class="hljs-built_in">size</span>();          <span class="hljs-comment">// 位数</span>
+bs.<span class="hljs-built_in">any</span>();           <span class="hljs-comment">// 是否有 1</span>
+bs.<span class="hljs-built_in">none</span>();          <span class="hljs-comment">// 是否全 0</span>
+bs.<span class="hljs-built_in">all</span>();           <span class="hljs-comment">// 是否全 1（C++11）</span>
+
+bs.<span class="hljs-built_in">set</span>();           <span class="hljs-comment">// 全部置 1</span>
+bs.<span class="hljs-built_in">set</span>(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>);       <span class="hljs-comment">// 第 0 位置 1</span>
+bs.<span class="hljs-built_in">reset</span>();         <span class="hljs-comment">// 全部置 0</span>
+bs.<span class="hljs-built_in">reset</span>(<span class="hljs-number">0</span>);        <span class="hljs-comment">// 第 0 位置 0</span>
+bs.<span class="hljs-built_in">flip</span>();          <span class="hljs-comment">// 全部取反</span>
+bs.<span class="hljs-built_in">flip</span>(<span class="hljs-number">0</span>);         <span class="hljs-comment">// 第 0 位取反</span>
+
+bs.<span class="hljs-built_in">to_string</span>();     <span class="hljs-comment">// 转 string</span>
+bs.<span class="hljs-built_in">to_ulong</span>();      <span class="hljs-comment">// 转 unsigned long</span>
+bs.<span class="hljs-built_in">to_ullong</span>();     <span class="hljs-comment">// 转 unsigned long long</span>
+
+<span class="hljs-comment">// 位运算</span>
+bs &amp; bs2; bs | bs2; bs ^ bs2; ~bs;
+bs &lt;&lt; <span class="hljs-number">1</span>; bs &gt;&gt; <span class="hljs-number">1</span>;</code></pre><h2>list</h2><pre><code class="hljs language-cpp">list&lt;<span class="hljs-type">int</span>&gt; lt;
+
+lt.<span class="hljs-built_in">push_back</span>(<span class="hljs-number">1</span>);    <span class="hljs-comment">// 尾插</span>
+lt.<span class="hljs-built_in">push_front</span>(<span class="hljs-number">1</span>);   <span class="hljs-comment">// 头插</span>
+lt.<span class="hljs-built_in">pop_back</span>();      <span class="hljs-comment">// 尾删</span>
+lt.<span class="hljs-built_in">pop_front</span>();     <span class="hljs-comment">// 头删</span>
+
+lt.<span class="hljs-built_in">front</span>();         <span class="hljs-comment">// 第一个</span>
+lt.<span class="hljs-built_in">back</span>();          <span class="hljs-comment">// 最后一个</span>
+
+lt.<span class="hljs-built_in">insert</span>(lt.<span class="hljs-built_in">begin</span>(), <span class="hljs-number">5</span>); <span class="hljs-comment">// 在迭代器处插入</span>
+lt.<span class="hljs-built_in">erase</span>(lt.<span class="hljs-built_in">begin</span>());     <span class="hljs-comment">// 删除迭代器</span>
+
+lt.<span class="hljs-built_in">size</span>();
+lt.<span class="hljs-built_in">empty</span>();
+lt.<span class="hljs-built_in">clear</span>();
+
+lt.<span class="hljs-built_in">sort</span>();          <span class="hljs-comment">// 排序（list 自带，不能用 std::sort）</span>
+lt.<span class="hljs-built_in">reverse</span>();       <span class="hljs-comment">// 翻转</span>
+lt.<span class="hljs-built_in">unique</span>();        <span class="hljs-comment">// 去重（相邻重复）</span>
+lt.<span class="hljs-built_in">remove</span>(<span class="hljs-number">1</span>);       <span class="hljs-comment">// 删除所有值为 1 的元素</span>
+lt.<span class="hljs-built_in">merge</span>(lt2);      <span class="hljs-comment">// 合并两个有序 list</span></code></pre><h2>stack</h2><pre><code class="hljs language-cpp">stack&lt;<span class="hljs-type">int</span>&gt; stk;
+
+stk.<span class="hljs-built_in">push</span>(<span class="hljs-number">1</span>);        <span class="hljs-comment">// 入栈</span>
+stk.<span class="hljs-built_in">pop</span>();          <span class="hljs-comment">// 出栈（不返回值）</span>
+stk.<span class="hljs-built_in">top</span>();          <span class="hljs-comment">// 栈顶</span>
+stk.<span class="hljs-built_in">size</span>();
+stk.<span class="hljs-built_in">empty</span>();
+
+<span class="hljs-comment">// 遍历（只能一边出栈一边访问）</span>
+<span class="hljs-keyword">while</span> (!stk.<span class="hljs-built_in">empty</span>())
+{
+    cout &lt;&lt; stk.<span class="hljs-built_in">top</span>() &lt;&lt; <span class="hljs-string">' '</span>;
+    stk.<span class="hljs-built_in">pop</span>();
+}</code></pre><h2>queue / priority_queue / deque</h2><pre><code class="hljs language-cpp">queue&lt;<span class="hljs-type">int</span>&gt; q;
+
+q.<span class="hljs-built_in">push</span>(<span class="hljs-number">1</span>);          <span class="hljs-comment">// 入队</span>
+q.<span class="hljs-built_in">pop</span>();            <span class="hljs-comment">// 出队（不返回值）</span>
+q.<span class="hljs-built_in">front</span>();          <span class="hljs-comment">// 队头</span>
+q.<span class="hljs-built_in">back</span>();           <span class="hljs-comment">// 队尾</span>
+q.<span class="hljs-built_in">size</span>();
+q.<span class="hljs-built_in">empty</span>();
+
+<span class="hljs-comment">// 优先队列（默认大根堆）</span>
+priority_queue&lt;<span class="hljs-type">int</span>&gt; pq;
+pq.<span class="hljs-built_in">push</span>(<span class="hljs-number">1</span>);
+pq.<span class="hljs-built_in">pop</span>();           <span class="hljs-comment">// 弹出最大</span>
+pq.<span class="hljs-built_in">top</span>();           <span class="hljs-comment">// 最大值</span>
+
+<span class="hljs-comment">// 小根堆</span>
+priority_queue&lt;<span class="hljs-type">int</span>, vector&lt;<span class="hljs-type">int</span>&gt;, greater&lt;<span class="hljs-type">int</span>&gt;&gt; pq2;
+
+<span class="hljs-comment">// 双端队列</span>
+deque&lt;<span class="hljs-type">int</span>&gt; dq;
+dq.<span class="hljs-built_in">push_back</span>(<span class="hljs-number">1</span>);    <span class="hljs-comment">// 尾插</span>
+dq.<span class="hljs-built_in">push_front</span>(<span class="hljs-number">1</span>);   <span class="hljs-comment">// 头插</span>
+dq.<span class="hljs-built_in">pop_back</span>();      <span class="hljs-comment">// 尾删</span>
+dq.<span class="hljs-built_in">pop_front</span>();     <span class="hljs-comment">// 头删</span>
+dq.<span class="hljs-built_in">front</span>();         <span class="hljs-comment">// 队头</span>
+dq.<span class="hljs-built_in">back</span>();          <span class="hljs-comment">// 队尾</span>
+dq[<span class="hljs-number">0</span>];              <span class="hljs-comment">// 下标访问（O(1)）</span></code></pre><h2>常用算法（algorithm）</h2><pre><code class="hljs language-cpp"><span class="hljs-built_in">sort</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>());          <span class="hljs-comment">// 升序</span>
+<span class="hljs-built_in">sort</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>(), <span class="hljs-built_in">greater</span>&lt;<span class="hljs-type">int</span>&gt;()); <span class="hljs-comment">// 降序</span>
+<span class="hljs-built_in">sort</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>(), [](<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b) { <span class="hljs-keyword">return</span> a &gt; b; }); <span class="hljs-comment">// 自定义</span>
+
+<span class="hljs-built_in">reverse</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>());       <span class="hljs-comment">// 翻转</span>
+<span class="hljs-built_in">unique</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>());        <span class="hljs-comment">// 去重（需先排序，返回新尾迭代器）</span>
+v.<span class="hljs-built_in">erase</span>(<span class="hljs-built_in">unique</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>()), v.<span class="hljs-built_in">end</span>()); <span class="hljs-comment">// 去重标准写法</span>
+
+<span class="hljs-built_in">find</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>(), <span class="hljs-number">1</span>);       <span class="hljs-comment">// 查找，返回迭代器</span>
+<span class="hljs-built_in">count</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>(), <span class="hljs-number">1</span>);      <span class="hljs-comment">// 计数</span>
+<span class="hljs-built_in">max_element</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>());   <span class="hljs-comment">// 最大值迭代器</span>
+<span class="hljs-built_in">min_element</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>());   <span class="hljs-comment">// 最小值迭代器</span>
+
+<span class="hljs-built_in">lower_bound</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>(), <span class="hljs-number">1</span>); <span class="hljs-comment">// 第一个 &gt;= 1（需有序）</span>
+<span class="hljs-built_in">upper_bound</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>(), <span class="hljs-number">1</span>); <span class="hljs-comment">// 第一个 &gt; 1（需有序）</span>
+
+<span class="hljs-built_in">binary_search</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>(), <span class="hljs-number">1</span>); <span class="hljs-comment">// 是否存在（需有序）</span>
+
+<span class="hljs-built_in">next_permutation</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>()); <span class="hljs-comment">// 下一个排列</span>
+<span class="hljs-built_in">prev_permutation</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>()); <span class="hljs-comment">// 上一个排列</span>
+
+<span class="hljs-built_in">fill</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>(), <span class="hljs-number">0</span>);       <span class="hljs-comment">// 填充</span>
+<span class="hljs-built_in">swap</span>(a, b);                        <span class="hljs-comment">// 交换</span>
+<span class="hljs-built_in">min</span>(a, b); <span class="hljs-built_in">max</span>(a, b);              <span class="hljs-comment">// 最值</span>
+
+__gcd(a, b);                       <span class="hljs-comment">// 最大公约数（GCC 内置）</span></code></pre><h1>快读快写</h1><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">read</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-type">int</span> x = <span class="hljs-number">0</span>, f = <span class="hljs-number">1</span>;
+    <span class="hljs-type">char</span> ch = <span class="hljs-built_in">getchar</span>();
+    <span class="hljs-keyword">while</span> (ch &lt; <span class="hljs-string">'0'</span> || ch &gt; <span class="hljs-string">'9'</span>)
+    {
+        <span class="hljs-keyword">if</span> (ch == <span class="hljs-string">'-'</span>)
+        {
+            f = <span class="hljs-number">-1</span>;
+        }
+        ch = <span class="hljs-built_in">getchar</span>();
+    }
+    <span class="hljs-keyword">while</span> (ch &gt;= <span class="hljs-string">'0'</span> &amp;&amp; ch &lt;= <span class="hljs-string">'9'</span>)
+    {
+        x = x * <span class="hljs-number">10</span> + ch - <span class="hljs-string">'0'</span>;
+        ch = <span class="hljs-built_in">getchar</span>();
+    }
+
+    <span class="hljs-keyword">return</span> x * f;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">write</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (x &lt; <span class="hljs-number">0</span>)
+    {
+        <span class="hljs-built_in">putchar</span>(<span class="hljs-string">'-'</span>);
+        x = -x;
+    }
+    <span class="hljs-keyword">if</span> (x &gt; <span class="hljs-number">9</span>)
+    {
+         <span class="hljs-built_in">write</span>(x / <span class="hljs-number">10</span>);
+    }
+    <span class="hljs-built_in">putchar</span>(x % <span class="hljs-number">10</span> + <span class="hljs-string">'0'</span>);
+    <span class="hljs-keyword">return</span>;
+}</code></pre><h1>基础DP</h1><h2>01背包</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m;
+<span class="hljs-type">int</span> w[<span class="hljs-number">1005</span>], v[<span class="hljs-number">1005</span>];
+<span class="hljs-type">int</span> f[<span class="hljs-number">1005</span>];
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cin &gt;&gt; w[i] &gt;&gt; v[i];
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = m; j &gt;= w[i]; j--)
+        {
+            f[j] = <span class="hljs-built_in">max</span>(f[j], f[j - w[i]] + v[i]);
+        }
+    }
+    cout &lt;&lt; f[m];
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>完全背包</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m;
+<span class="hljs-type">int</span> w[<span class="hljs-number">1005</span>], v[<span class="hljs-number">1005</span>];
+<span class="hljs-type">int</span> f[<span class="hljs-number">1005</span>];
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cin &gt;&gt; w[i] &gt;&gt; v[i];
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = w[i]; j &lt;= m; j++)
+        {
+            f[j] = <span class="hljs-built_in">max</span>(f[j], f[j - w[i]] + v[i]);
+        }
+    }
+    cout &lt;&lt; f[m];
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>最长上升子序列（LIS）</h2><h3>基础版</h3><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, ans;
+<span class="hljs-type">int</span> a[<span class="hljs-number">5005</span>], f[<span class="hljs-number">5005</span>];
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cin &gt;&gt; a[i];
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        f[i] = <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt; i; j++)
+        {
+            <span class="hljs-keyword">if</span> (a[j] &lt; a[i])
+            {
+                f[i] = <span class="hljs-built_in">max</span>(f[i], f[j] + <span class="hljs-number">1</span>);
+            }
+        }
+        ans = <span class="hljs-built_in">max</span>(ans, f[i]);
+    }
+    cout &lt;&lt; ans;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h3>进阶版</h3><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n;
+<span class="hljs-type">int</span> a[<span class="hljs-number">100005</span>];
+<span class="hljs-type">int</span> d[<span class="hljs-number">100005</span>];
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cin &gt;&gt; a[i];
+    }
+    <span class="hljs-type">int</span> len = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-type">int</span> pos = <span class="hljs-built_in">lower_bound</span>(d + <span class="hljs-number">1</span>, d + len + <span class="hljs-number">1</span>, a[i]) - d;
+        d[pos] = a[i];
+        <span class="hljs-keyword">if</span> (pos &gt; len)
+        {
+            len++;
+        }
+    }
+    cout &lt;&lt; len;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>最长公共子序列（LCS）</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m;
+<span class="hljs-type">int</span> a[<span class="hljs-number">1005</span>], b[<span class="hljs-number">1005</span>];
+<span class="hljs-type">int</span> f[<span class="hljs-number">1005</span>][<span class="hljs-number">1005</span>];
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cin &gt;&gt; a[i];
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++)
+    {
+        cin &gt;&gt; b[i];
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt;= m; j++)
+        {
+            <span class="hljs-keyword">if</span> (a[i] == b[j])
+            {
+                f[i][j] = f[i - <span class="hljs-number">1</span>][j - <span class="hljs-number">1</span>] + <span class="hljs-number">1</span>;
+            }
+            <span class="hljs-keyword">else</span>
+            {
+                f[i][j] = <span class="hljs-built_in">max</span>(f[i - <span class="hljs-number">1</span>][j], f[i][j - <span class="hljs-number">1</span>]);
+            }
+        }
+    }
+    cout &lt;&lt; f[n][m];
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h1>差分</h1><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m;
+<span class="hljs-type">int</span> a[<span class="hljs-number">100005</span>], d[<span class="hljs-number">100005</span>];
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cin &gt;&gt; a[i];
+        d[i] = a[i] - a[i - <span class="hljs-number">1</span>];      <span class="hljs-comment">// 构造差分</span>
+    }
+    <span class="hljs-keyword">while</span> (m--)
+    {
+        <span class="hljs-type">int</span> l, r, x;
+        cin &gt;&gt; l &gt;&gt; r &gt;&gt; x;
+        d[l] += x;                   <span class="hljs-comment">// 区间加</span>
+        d[r + <span class="hljs-number">1</span>] -= x;
+    }
+    <span class="hljs-type">int</span> tot = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        tot += d[i];                 <span class="hljs-comment">// 前缀和还原</span>
+        cout &lt;&lt; tot &lt;&lt; <span class="hljs-string">' '</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h1>最短路</h1><h2>Dijkstra（堆优化）</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">const</span> <span class="hljs-type">int</span> INF = <span class="hljs-number">1e18</span>;
+
+<span class="hljs-type">int</span> n, m, s;
+<span class="hljs-type">int</span> dis[<span class="hljs-number">100005</span>];
+<span class="hljs-type">bool</span> vis[<span class="hljs-number">100005</span>];
+vector&lt;pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;&gt; g[<span class="hljs-number">100005</span>];   <span class="hljs-comment">// {to, w}</span>
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dijkstra</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+        dis[i] = INF;
+    dis[s] = <span class="hljs-number">0</span>;
+    priority_queue&lt;pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;, vector&lt;pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;&gt;, greater&lt;pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;&gt;&gt; pq;
+    pq.<span class="hljs-built_in">push</span>({<span class="hljs-number">0</span>, s});
+    <span class="hljs-keyword">while</span> (!pq.<span class="hljs-built_in">empty</span>())
+    {
+        <span class="hljs-type">int</span> u = pq.<span class="hljs-built_in">top</span>().second;
+        pq.<span class="hljs-built_in">pop</span>();
+        <span class="hljs-keyword">if</span> (vis[u])
+            <span class="hljs-keyword">continue</span>;
+        vis[u] = <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> &amp;e : g[u])
+        {
+            <span class="hljs-type">int</span> v = e.first, w = e.second;
+            <span class="hljs-keyword">if</span> (dis[v] &gt; dis[u] + w)
+            {
+                dis[v] = dis[u] + w;
+                pq.<span class="hljs-built_in">push</span>({dis[v], v});
+            }
+        }
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m &gt;&gt; s;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++)
+    {
+        <span class="hljs-type">int</span> u, v, w;
+        cin &gt;&gt; u &gt;&gt; v &gt;&gt; w;
+        g[u].<span class="hljs-built_in">push_back</span>({v, w});
+    }
+    <span class="hljs-built_in">dijkstra</span>();
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cout &lt;&lt; dis[i] &lt;&lt; <span class="hljs-string">' '</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>SPFA</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">const</span> <span class="hljs-type">int</span> INF = <span class="hljs-number">1e18</span>;
+
+<span class="hljs-type">int</span> n, m, s;
+<span class="hljs-type">int</span> dis[<span class="hljs-number">100005</span>], cnt[<span class="hljs-number">100005</span>];
+<span class="hljs-type">bool</span> inq[<span class="hljs-number">100005</span>];
+vector&lt;pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;&gt; g[<span class="hljs-number">100005</span>];
+queue&lt;<span class="hljs-type">int</span>&gt; q;
+
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">spfa</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+        dis[i] = INF;
+    dis[s] = <span class="hljs-number">0</span>;
+    q.<span class="hljs-built_in">push</span>(s);
+    inq[s] = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">while</span> (!q.<span class="hljs-built_in">empty</span>())
+    {
+        <span class="hljs-type">int</span> u = q.<span class="hljs-built_in">front</span>();
+        q.<span class="hljs-built_in">pop</span>();
+        inq[u] = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> &amp;e : g[u])
+        {
+            <span class="hljs-type">int</span> v = e.first, w = e.second;
+            <span class="hljs-keyword">if</span> (dis[v] &gt; dis[u] + w)
+            {
+                dis[v] = dis[u] + w;
+                cnt[v] = cnt[u] + <span class="hljs-number">1</span>;
+                <span class="hljs-keyword">if</span> (cnt[v] &gt;= n)
+                    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;   <span class="hljs-comment">// 负环</span>
+                <span class="hljs-keyword">if</span> (!inq[v])
+                {
+                    q.<span class="hljs-built_in">push</span>(v);
+                    inq[v] = <span class="hljs-number">1</span>;
+                }
+            }
+        }
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m &gt;&gt; s;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++)
+    {
+        <span class="hljs-type">int</span> u, v, w;
+        cin &gt;&gt; u &gt;&gt; v &gt;&gt; w;
+        g[u].<span class="hljs-built_in">push_back</span>({v, w});
+    }
+    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">spfa</span>())
+    {
+        cout &lt;&lt; <span class="hljs-string">"负环"</span>;
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cout &lt;&lt; dis[i] &lt;&lt; <span class="hljs-string">' '</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>Bellman-Ford</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">const</span> <span class="hljs-type">int</span> INF = <span class="hljs-number">1e18</span>;
+
+<span class="hljs-type">int</span> n, m, s;
+<span class="hljs-type">int</span> dis[<span class="hljs-number">100005</span>];
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Edge</span>
+{
+    <span class="hljs-type">int</span> u, v, w;
+} e[<span class="hljs-number">100005</span>];
+
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">bellman</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+        dis[i] = INF;
+    dis[s] = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n - <span class="hljs-number">1</span>; i++)
+    {
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt;= m; j++)
+        {
+            <span class="hljs-type">int</span> u = e[j].u, v = e[j].v, w = e[j].w;
+            <span class="hljs-keyword">if</span> (dis[u] != INF &amp;&amp; dis[v] &gt; dis[u] + w)
+                dis[v] = dis[u] + w;
+        }
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt;= m; j++)
+    {
+        <span class="hljs-type">int</span> u = e[j].u, v = e[j].v, w = e[j].w;
+        <span class="hljs-keyword">if</span> (dis[u] != INF &amp;&amp; dis[v] &gt; dis[u] + w)
+            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;   <span class="hljs-comment">// 负环</span>
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m &gt;&gt; s;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++)
+    {
+        cin &gt;&gt; e[i].u &gt;&gt; e[i].v &gt;&gt; e[i].w;
+    }
+    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">bellman</span>())
+    {
+        cout &lt;&lt; <span class="hljs-string">"负环"</span>;
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cout &lt;&lt; dis[i] &lt;&lt; <span class="hljs-string">' '</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>Floyd</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">const</span> <span class="hljs-type">int</span> INF = <span class="hljs-number">1e18</span>;
+
+<span class="hljs-type">int</span> n, m;
+<span class="hljs-type">int</span> f[<span class="hljs-number">505</span>][<span class="hljs-number">505</span>];
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt;= n; j++)
+        {
+            f[i][j] = (i == j ? <span class="hljs-number">0</span> : INF);
+        }
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++)
+    {
+        <span class="hljs-type">int</span> u, v, w;
+        cin &gt;&gt; u &gt;&gt; v &gt;&gt; w;
+        f[u][v] = <span class="hljs-built_in">min</span>(f[u][v], w);
+        f[v][u] = <span class="hljs-built_in">min</span>(f[v][u], w);
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> k = <span class="hljs-number">1</span>; k &lt;= n; k++)
+    {
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+        {
+            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt;= n; j++)
+            {
+                f[i][j] = <span class="hljs-built_in">min</span>(f[i][j], f[i][k] + f[k][j]);
+            }
+        }
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt;= n; j++)
+        {
+            cout &lt;&lt; f[i][j] &lt;&lt; <span class="hljs-string">' '</span>;
+        }
+        cout &lt;&lt; <span class="hljs-string">'\n'</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h1>生成树</h1><h2>Kruskal</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m;
+<span class="hljs-type">int</span> fa[<span class="hljs-number">100005</span>];
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Edge</span>
+{
+    <span class="hljs-type">int</span> u, v, w;
+} e[<span class="hljs-number">200005</span>];
+
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(Edge a, Edge b)</span>
+</span>{
+    <span class="hljs-keyword">return</span> a.w &lt; b.w;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (fa[x] == x)
+        <span class="hljs-keyword">return</span> x;
+    <span class="hljs-keyword">return</span> fa[x] = <span class="hljs-built_in">find</span>(fa[x]);
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">kruskal</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+        fa[i] = i;
+    <span class="hljs-built_in">sort</span>(e + <span class="hljs-number">1</span>, e + m + <span class="hljs-number">1</span>, cmp);
+    <span class="hljs-type">int</span> tot = <span class="hljs-number">0</span>, cnt = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++)
+    {
+        <span class="hljs-type">int</span> u = <span class="hljs-built_in">find</span>(e[i].u), v = <span class="hljs-built_in">find</span>(e[i].v);
+        <span class="hljs-keyword">if</span> (u != v)
+        {
+            fa[u] = v;
+            tot += e[i].w;
+            cnt++;
+            <span class="hljs-keyword">if</span> (cnt == n - <span class="hljs-number">1</span>)
+                <span class="hljs-keyword">break</span>;
+        }
+    }
+    <span class="hljs-keyword">return</span> cnt == n - <span class="hljs-number">1</span> ? tot : <span class="hljs-number">-1</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++)
+    {
+        cin &gt;&gt; e[i].u &gt;&gt; e[i].v &gt;&gt; e[i].w;
+    }
+    cout &lt;&lt; <span class="hljs-built_in">kruskal</span>();
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>Prim</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">const</span> <span class="hljs-type">int</span> INF = <span class="hljs-number">1e18</span>;
+
+<span class="hljs-type">int</span> n, m;
+<span class="hljs-type">int</span> dis[<span class="hljs-number">5005</span>];
+<span class="hljs-type">bool</span> vis[<span class="hljs-number">5005</span>];
+<span class="hljs-type">int</span> g[<span class="hljs-number">5005</span>][<span class="hljs-number">5005</span>];
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">prim</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+        dis[i] = INF;
+    dis[<span class="hljs-number">1</span>] = <span class="hljs-number">0</span>;
+    <span class="hljs-type">int</span> tot = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-type">int</span> u = <span class="hljs-number">-1</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt;= n; j++)
+        {
+            <span class="hljs-keyword">if</span> (!vis[j] &amp;&amp; (u == <span class="hljs-number">-1</span> || dis[j] &lt; dis[u]))
+                u = j;
+        }
+        <span class="hljs-keyword">if</span> (dis[u] == INF)
+            <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
+        vis[u] = <span class="hljs-number">1</span>;
+        tot += dis[u];
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> v = <span class="hljs-number">1</span>; v &lt;= n; v++)
+        {
+            <span class="hljs-keyword">if</span> (!vis[v] &amp;&amp; g[u][v] &lt; dis[v])
+                dis[v] = g[u][v];
+        }
+    }
+    <span class="hljs-keyword">return</span> tot;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt;= n; j++)
+        {
+            g[i][j] = (i == j ? <span class="hljs-number">0</span> : INF);
+        }
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++)
+    {
+        <span class="hljs-type">int</span> u, v, w;
+        cin &gt;&gt; u &gt;&gt; v &gt;&gt; w;
+        g[u][v] = <span class="hljs-built_in">min</span>(g[u][v], w);
+        g[v][u] = <span class="hljs-built_in">min</span>(g[v][u], w);
+    }
+    cout &lt;&lt; <span class="hljs-built_in">prim</span>();
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h1>Tarjan</h1><h2>强连通分量（SCC）</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m, tot, cnt, top;
+<span class="hljs-type">int</span> dfn[<span class="hljs-number">100005</span>], low[<span class="hljs-number">100005</span>], stk[<span class="hljs-number">100005</span>], scc[<span class="hljs-number">100005</span>];
+<span class="hljs-type">bool</span> inq[<span class="hljs-number">100005</span>];
+vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">100005</span>];
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">tarjan</span><span class="hljs-params">(<span class="hljs-type">int</span> u)</span>
+</span>{
+    dfn[u] = low[u] = ++tot;
+    stk[++top] = u;
+    inq[u] = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> v : g[u])
+    {
+        <span class="hljs-keyword">if</span> (!dfn[v])
+        {
+            <span class="hljs-built_in">tarjan</span>(v);
+            low[u] = <span class="hljs-built_in">min</span>(low[u], low[v]);
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (inq[v])
+        {
+            low[u] = <span class="hljs-built_in">min</span>(low[u], dfn[v]);
+        }
+    }
+    <span class="hljs-keyword">if</span> (dfn[u] == low[u])
+    {
+        cnt++;
+        <span class="hljs-type">int</span> v;
+        <span class="hljs-keyword">do</span>
+        {
+            v = stk[top--];
+            inq[v] = <span class="hljs-number">0</span>;
+            scc[v] = cnt;
+        } <span class="hljs-keyword">while</span> (v != u);
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++)
+    {
+        <span class="hljs-type">int</span> u, v;
+        cin &gt;&gt; u &gt;&gt; v;
+        g[u].<span class="hljs-built_in">push_back</span>(v);
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">if</span> (!dfn[i])
+            <span class="hljs-built_in">tarjan</span>(i);
+    }
+    cout &lt;&lt; cnt &lt;&lt; <span class="hljs-string">'\n'</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cout &lt;&lt; scc[i] &lt;&lt; <span class="hljs-string">' '</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>割点</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m, tot;
+<span class="hljs-type">int</span> dfn[<span class="hljs-number">100005</span>], low[<span class="hljs-number">100005</span>];
+<span class="hljs-type">bool</span> iscut[<span class="hljs-number">100005</span>];
+vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">100005</span>];
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">tarjan</span><span class="hljs-params">(<span class="hljs-type">int</span> u, <span class="hljs-type">int</span> fa)</span>
+</span>{
+    dfn[u] = low[u] = ++tot;
+    <span class="hljs-type">int</span> child = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> v : g[u])
+    {
+        <span class="hljs-keyword">if</span> (!dfn[v])
+        {
+            child++;
+            <span class="hljs-built_in">tarjan</span>(v, u);
+            low[u] = <span class="hljs-built_in">min</span>(low[u], low[v]);
+            <span class="hljs-keyword">if</span> (low[v] &gt;= dfn[u])
+                iscut[u] = <span class="hljs-number">1</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (v != fa)
+        {
+            low[u] = <span class="hljs-built_in">min</span>(low[u], dfn[v]);
+        }
+    }
+    <span class="hljs-keyword">if</span> (fa == <span class="hljs-number">0</span> &amp;&amp; child == <span class="hljs-number">1</span>)
+        iscut[u] = <span class="hljs-number">0</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++)
+    {
+        <span class="hljs-type">int</span> u, v;
+        cin &gt;&gt; u &gt;&gt; v;
+        g[u].<span class="hljs-built_in">push_back</span>(v);
+        g[v].<span class="hljs-built_in">push_back</span>(u);
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">if</span> (!dfn[i])
+            <span class="hljs-built_in">tarjan</span>(i, <span class="hljs-number">0</span>);
+    }
+    <span class="hljs-type">int</span> ans = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">if</span> (iscut[i])
+            ans++;
+    }
+    cout &lt;&lt; ans;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>桥</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m, tot;
+<span class="hljs-type">int</span> dfn[<span class="hljs-number">100005</span>], low[<span class="hljs-number">100005</span>];
+vector&lt;pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;&gt; g[<span class="hljs-number">100005</span>];   <span class="hljs-comment">// {to, id}</span>
+<span class="hljs-type">bool</span> isbridge[<span class="hljs-number">200005</span>];
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">tarjan</span><span class="hljs-params">(<span class="hljs-type">int</span> u, <span class="hljs-type">int</span> fa)</span>
+</span>{
+    dfn[u] = low[u] = ++tot;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> &amp;e : g[u])
+    {
+        <span class="hljs-type">int</span> v = e.first, id = e.second;
+        <span class="hljs-keyword">if</span> (!dfn[v])
+        {
+            <span class="hljs-built_in">tarjan</span>(v, id);
+            low[u] = <span class="hljs-built_in">min</span>(low[u], low[v]);
+            <span class="hljs-keyword">if</span> (low[v] &gt; dfn[u])
+                isbridge[id] = <span class="hljs-number">1</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (id != fa)
+        {
+            low[u] = <span class="hljs-built_in">min</span>(low[u], dfn[v]);
+        }
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++)
+    {
+        <span class="hljs-type">int</span> u, v;
+        cin &gt;&gt; u &gt;&gt; v;
+        g[u].<span class="hljs-built_in">push_back</span>({v, i});
+        g[v].<span class="hljs-built_in">push_back</span>({u, i});
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">if</span> (!dfn[i])
+            <span class="hljs-built_in">tarjan</span>(i, <span class="hljs-number">0</span>);
+    }
+    <span class="hljs-type">int</span> ans = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++)
+    {
+        <span class="hljs-keyword">if</span> (isbridge[i])
+            ans++;
+    }
+    cout &lt;&lt; ans;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>点双连通分量</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m, tot, cnt, top;
+<span class="hljs-type">int</span> dfn[<span class="hljs-number">100005</span>], low[<span class="hljs-number">100005</span>], stk[<span class="hljs-number">100005</span>];
+vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">100005</span>];
+vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; bcc;
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">tarjan</span><span class="hljs-params">(<span class="hljs-type">int</span> u, <span class="hljs-type">int</span> fa)</span>
+</span>{
+    dfn[u] = low[u] = ++tot;
+    stk[++top] = u;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> v : g[u])
+    {
+        <span class="hljs-keyword">if</span> (!dfn[v])
+        {
+            <span class="hljs-built_in">tarjan</span>(v, u);
+            low[u] = <span class="hljs-built_in">min</span>(low[u], low[v]);
+            <span class="hljs-keyword">if</span> (low[v] &gt;= dfn[u])
+            {
+                cnt++;
+                vector&lt;<span class="hljs-type">int</span>&gt; vec;
+                <span class="hljs-type">int</span> w;
+                <span class="hljs-keyword">do</span>
+                {
+                    w = stk[top--];
+                    vec.<span class="hljs-built_in">push_back</span>(w);
+                } <span class="hljs-keyword">while</span> (w != v);
+                vec.<span class="hljs-built_in">push_back</span>(u);
+                bcc.<span class="hljs-built_in">push_back</span>(vec);
+            }
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (v != fa)
+        {
+            low[u] = <span class="hljs-built_in">min</span>(low[u], dfn[v]);
+        }
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++)
+    {
+        <span class="hljs-type">int</span> u, v;
+        cin &gt;&gt; u &gt;&gt; v;
+        g[u].<span class="hljs-built_in">push_back</span>(v);
+        g[v].<span class="hljs-built_in">push_back</span>(u);
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">if</span> (!dfn[i])
+            <span class="hljs-built_in">tarjan</span>(i, <span class="hljs-number">0</span>);
+    }
+    cout &lt;&lt; bcc.<span class="hljs-built_in">size</span>() &lt;&lt; <span class="hljs-string">'\n'</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>边双连通分量</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m, tot, cnt;
+<span class="hljs-type">int</span> dfn[<span class="hljs-number">100005</span>], low[<span class="hljs-number">100005</span>], scc[<span class="hljs-number">100005</span>];
+vector&lt;pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;&gt; g[<span class="hljs-number">100005</span>];   <span class="hljs-comment">// {to, id}</span>
+<span class="hljs-type">bool</span> isbridge[<span class="hljs-number">200005</span>];
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">tarjan</span><span class="hljs-params">(<span class="hljs-type">int</span> u, <span class="hljs-type">int</span> fa)</span>
+</span>{
+    dfn[u] = low[u] = ++tot;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> &amp;e : g[u])
+    {
+        <span class="hljs-type">int</span> v = e.first, id = e.second;
+        <span class="hljs-keyword">if</span> (!dfn[v])
+        {
+            <span class="hljs-built_in">tarjan</span>(v, id);
+            low[u] = <span class="hljs-built_in">min</span>(low[u], low[v]);
+            <span class="hljs-keyword">if</span> (low[v] &gt; dfn[u])
+                isbridge[id] = <span class="hljs-number">1</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (id != fa)
+        {
+            low[u] = <span class="hljs-built_in">min</span>(low[u], dfn[v]);
+        }
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> u)</span>
+</span>{
+    scc[u] = cnt;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> &amp;e : g[u])
+    {
+        <span class="hljs-type">int</span> v = e.first, id = e.second;
+        <span class="hljs-keyword">if</span> (isbridge[id] || scc[v])
+            <span class="hljs-keyword">continue</span>;
+        <span class="hljs-built_in">dfs</span>(v);
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++)
+    {
+        <span class="hljs-type">int</span> u, v;
+        cin &gt;&gt; u &gt;&gt; v;
+        g[u].<span class="hljs-built_in">push_back</span>({v, i});
+        g[v].<span class="hljs-built_in">push_back</span>({u, i});
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">if</span> (!dfn[i])
+            <span class="hljs-built_in">tarjan</span>(i, <span class="hljs-number">0</span>);
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">if</span> (!scc[i])
+        {
+            cnt++;
+            <span class="hljs-built_in">dfs</span>(i);
+        }
+    }
+    cout &lt;&lt; cnt &lt;&lt; <span class="hljs-string">'\n'</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h1>补充</h1><h2>LCA 倍增</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m, rt;
+<span class="hljs-type">int</span> dep[<span class="hljs-number">500005</span>];
+<span class="hljs-type">int</span> fa[<span class="hljs-number">500005</span>][<span class="hljs-number">25</span>];
+vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">500005</span>];
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> u, <span class="hljs-type">int</span> f)</span>
+</span>{
+    dep[u] = dep[f] + <span class="hljs-number">1</span>;
+    fa[u][<span class="hljs-number">0</span>] = f;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">20</span>; i++)
+    {
+        fa[u][i] = fa[fa[u][i - <span class="hljs-number">1</span>]][i - <span class="hljs-number">1</span>];
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> v : g[u])
+    {
+        <span class="hljs-keyword">if</span> (v != f)
+            <span class="hljs-built_in">dfs</span>(v, u);
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">lca</span><span class="hljs-params">(<span class="hljs-type">int</span> u, <span class="hljs-type">int</span> v)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (dep[u] &lt; dep[v])
+        <span class="hljs-built_in">swap</span>(u, v);
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">20</span>; i &gt;= <span class="hljs-number">0</span>; i--)
+    {
+        <span class="hljs-keyword">if</span> (dep[fa[u][i]] &gt;= dep[v])
+            u = fa[u][i];
+    }
+    <span class="hljs-keyword">if</span> (u == v)
+        <span class="hljs-keyword">return</span> u;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">20</span>; i &gt;= <span class="hljs-number">0</span>; i--)
+    {
+        <span class="hljs-keyword">if</span> (fa[u][i] != fa[v][i])
+        {
+            u = fa[u][i];
+            v = fa[v][i];
+        }
+    }
+    <span class="hljs-keyword">return</span> fa[u][<span class="hljs-number">0</span>];
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m &gt;&gt; rt;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; n; i++)
+    {
+        <span class="hljs-type">int</span> u, v;
+        cin &gt;&gt; u &gt;&gt; v;
+        g[u].<span class="hljs-built_in">push_back</span>(v);
+        g[v].<span class="hljs-built_in">push_back</span>(u);
+    }
+    <span class="hljs-built_in">dfs</span>(rt, <span class="hljs-number">0</span>);
+    <span class="hljs-keyword">while</span> (m--)
+    {
+        <span class="hljs-type">int</span> u, v;
+        cin &gt;&gt; u &gt;&gt; v;
+        cout &lt;&lt; <span class="hljs-built_in">lca</span>(u, v) &lt;&lt; <span class="hljs-string">'\n'</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>拓扑排序</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m;
+<span class="hljs-type">int</span> in[<span class="hljs-number">100005</span>];
+vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">100005</span>];
+queue&lt;<span class="hljs-type">int</span>&gt; q;
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">topo</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">if</span> (!in[i])
+            q.<span class="hljs-built_in">push</span>(i);
+    }
+    <span class="hljs-keyword">while</span> (!q.<span class="hljs-built_in">empty</span>())
+    {
+        <span class="hljs-type">int</span> u = q.<span class="hljs-built_in">front</span>();
+        q.<span class="hljs-built_in">pop</span>();
+        cout &lt;&lt; u &lt;&lt; <span class="hljs-string">' '</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> v : g[u])
+        {
+            <span class="hljs-keyword">if</span> (--in[v] == <span class="hljs-number">0</span>)
+                q.<span class="hljs-built_in">push</span>(v);
+        }
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++)
+    {
+        <span class="hljs-type">int</span> u, v;
+        cin &gt;&gt; u &gt;&gt; v;
+        g[u].<span class="hljs-built_in">push_back</span>(v);
+        in[v]++;
+    }
+    <span class="hljs-built_in">topo</span>();
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>二分图染色</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m;
+<span class="hljs-type">int</span> col[<span class="hljs-number">100005</span>];
+vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">100005</span>];
+
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> u, <span class="hljs-type">int</span> c)</span>
+</span>{
+    col[u] = c;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> v : g[u])
+    {
+        <span class="hljs-keyword">if</span> (!col[v])
+        {
+            <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">dfs</span>(v, <span class="hljs-number">3</span> - c))
+                <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (col[v] == c)
+        {
+            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        }
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++)
+    {
+        <span class="hljs-type">int</span> u, v;
+        cin &gt;&gt; u &gt;&gt; v;
+        g[u].<span class="hljs-built_in">push_back</span>(v);
+        g[v].<span class="hljs-built_in">push_back</span>(u);
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">if</span> (!col[i])
+        {
+            <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">dfs</span>(i, <span class="hljs-number">1</span>))
+            {
+                cout &lt;&lt; <span class="hljs-string">"No"</span>;
+                <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+            }
+        }
+    }
+    cout &lt;&lt; <span class="hljs-string">"Yes"</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>匈牙利算法</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m, e, ans;
+<span class="hljs-type">int</span> match[<span class="hljs-number">100005</span>];
+<span class="hljs-type">bool</span> vis[<span class="hljs-number">100005</span>];
+vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">100005</span>];
+
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> u)</span>
+</span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> v : g[u])
+    {
+        <span class="hljs-keyword">if</span> (vis[v])
+            <span class="hljs-keyword">continue</span>;
+        vis[v] = <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">if</span> (!match[v] || <span class="hljs-built_in">dfs</span>(match[v]))
+        {
+            match[v] = u;
+            <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+        }
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m &gt;&gt; e;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= e; i++)
+    {
+        <span class="hljs-type">int</span> u, v;
+        cin &gt;&gt; u &gt;&gt; v;
+        g[u].<span class="hljs-built_in">push_back</span>(v);
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-built_in">memset</span>(vis, <span class="hljs-number">0</span>, <span class="hljs-built_in">sizeof</span>(vis));
+        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">dfs</span>(i))
+            ans++;
+    }
+    cout &lt;&lt; ans;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h1>线段树</h1><h2>线段树（区间加 + 区间和）</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> int long long</span>
+
+<span class="hljs-type">int</span> n, m;
+<span class="hljs-type">int</span> a[<span class="hljs-number">100005</span>];
+<span class="hljs-type">int</span> sum[<span class="hljs-number">400005</span>], lazy[<span class="hljs-number">400005</span>];
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pushup</span><span class="hljs-params">(<span class="hljs-type">int</span> p)</span>
+</span>{
+    sum[p] = sum[p * <span class="hljs-number">2</span>] + sum[p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>];
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pushdown</span><span class="hljs-params">(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (lazy[p])
+    {
+        <span class="hljs-type">int</span> mid = (l + r) / <span class="hljs-number">2</span>;
+        sum[p * <span class="hljs-number">2</span>] += lazy[p] * (mid - l + <span class="hljs-number">1</span>);
+        sum[p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>] += lazy[p] * (r - mid);
+        lazy[p * <span class="hljs-number">2</span>] += lazy[p];
+        lazy[p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>] += lazy[p];
+        lazy[p] = <span class="hljs-number">0</span>;
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">build</span><span class="hljs-params">(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (l == r)
+    {
+        sum[p] = a[l];
+        <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-type">int</span> mid = (l + r) / <span class="hljs-number">2</span>;
+    <span class="hljs-built_in">build</span>(p * <span class="hljs-number">2</span>, l, mid);
+    <span class="hljs-built_in">build</span>(p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>, mid + <span class="hljs-number">1</span>, r);
+    <span class="hljs-built_in">pushup</span>(p);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r, <span class="hljs-type">int</span> ql, <span class="hljs-type">int</span> qr, <span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (ql &lt;= l &amp;&amp; r &lt;= qr)
+    {
+        sum[p] += x * (r - l + <span class="hljs-number">1</span>);
+        lazy[p] += x;
+        <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-built_in">pushdown</span>(p, l, r);
+    <span class="hljs-type">int</span> mid = (l + r) / <span class="hljs-number">2</span>;
+    <span class="hljs-keyword">if</span> (ql &lt;= mid)
+        <span class="hljs-built_in">update</span>(p * <span class="hljs-number">2</span>, l, mid, ql, qr, x);
+    <span class="hljs-keyword">if</span> (qr &gt; mid)
+        <span class="hljs-built_in">update</span>(p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>, mid + <span class="hljs-number">1</span>, r, ql, qr, x);
+    <span class="hljs-built_in">pushup</span>(p);
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">query</span><span class="hljs-params">(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r, <span class="hljs-type">int</span> ql, <span class="hljs-type">int</span> qr)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (ql &lt;= l &amp;&amp; r &lt;= qr)
+        <span class="hljs-keyword">return</span> sum[p];
+    <span class="hljs-built_in">pushdown</span>(p, l, r);
+    <span class="hljs-type">int</span> mid = (l + r) / <span class="hljs-number">2</span>, res = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">if</span> (ql &lt;= mid)
+        res += <span class="hljs-built_in">query</span>(p * <span class="hljs-number">2</span>, l, mid, ql, qr);
+    <span class="hljs-keyword">if</span> (qr &gt; mid)
+        res += <span class="hljs-built_in">query</span>(p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>, mid + <span class="hljs-number">1</span>, r, ql, qr);
+    <span class="hljs-keyword">return</span> res;
+}
+
+<span class="hljs-function"><span class="hljs-type">signed</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cin &gt;&gt; a[i];
+    }
+    <span class="hljs-built_in">build</span>(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, n);
+    <span class="hljs-keyword">while</span> (m--)
+    {
+        <span class="hljs-type">int</span> op, l, r, x;
+        cin &gt;&gt; op;
+        <span class="hljs-keyword">if</span> (op == <span class="hljs-number">1</span>)
+        {
+            cin &gt;&gt; l &gt;&gt; r &gt;&gt; x;
+            <span class="hljs-built_in">update</span>(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, n, l, r, x);
+        }
+        <span class="hljs-keyword">else</span>
+        {
+            cin &gt;&gt; l &gt;&gt; r;
+            cout &lt;&lt; <span class="hljs-built_in">query</span>(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, n, l, r) &lt;&lt; <span class="hljs-string">'\n'</span>;
+        }
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>线段树（区间乘 + 区间加 + 区间和）</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> int long long</span>
+
+<span class="hljs-type">int</span> n, m, mod;
+<span class="hljs-type">int</span> a[<span class="hljs-number">100005</span>];
+<span class="hljs-type">int</span> sum[<span class="hljs-number">400005</span>], add[<span class="hljs-number">400005</span>], mul[<span class="hljs-number">400005</span>];
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pushup</span><span class="hljs-params">(<span class="hljs-type">int</span> p)</span>
+</span>{
+    sum[p] = (sum[p * <span class="hljs-number">2</span>] + sum[p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>]) % mod;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pushdown</span><span class="hljs-params">(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span>
+</span>{
+    <span class="hljs-type">int</span> mid = (l + r) / <span class="hljs-number">2</span>;
+    sum[p * <span class="hljs-number">2</span>] = (sum[p * <span class="hljs-number">2</span>] * mul[p] + add[p] * (mid - l + <span class="hljs-number">1</span>)) % mod;
+    sum[p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>] = (sum[p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>] * mul[p] + add[p] * (r - mid)) % mod;
+    mul[p * <span class="hljs-number">2</span>] = mul[p * <span class="hljs-number">2</span>] * mul[p] % mod;
+    mul[p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>] = mul[p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>] * mul[p] % mod;
+    add[p * <span class="hljs-number">2</span>] = (add[p * <span class="hljs-number">2</span>] * mul[p] + add[p]) % mod;
+    add[p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>] = (add[p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>] * mul[p] + add[p]) % mod;
+    mul[p] = <span class="hljs-number">1</span>;
+    add[p] = <span class="hljs-number">0</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">build</span><span class="hljs-params">(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span>
+</span>{
+    mul[p] = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">if</span> (l == r)
+    {
+        sum[p] = a[l] % mod;
+        <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-type">int</span> mid = (l + r) / <span class="hljs-number">2</span>;
+    <span class="hljs-built_in">build</span>(p * <span class="hljs-number">2</span>, l, mid);
+    <span class="hljs-built_in">build</span>(p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>, mid + <span class="hljs-number">1</span>, r);
+    <span class="hljs-built_in">pushup</span>(p);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update_add</span><span class="hljs-params">(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r, <span class="hljs-type">int</span> ql, <span class="hljs-type">int</span> qr, <span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (ql &lt;= l &amp;&amp; r &lt;= qr)
+    {
+        sum[p] = (sum[p] + x * (r - l + <span class="hljs-number">1</span>)) % mod;
+        add[p] = (add[p] + x) % mod;
+        <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-built_in">pushdown</span>(p, l, r);
+    <span class="hljs-type">int</span> mid = (l + r) / <span class="hljs-number">2</span>;
+    <span class="hljs-keyword">if</span> (ql &lt;= mid)
+        <span class="hljs-built_in">update_add</span>(p * <span class="hljs-number">2</span>, l, mid, ql, qr, x);
+    <span class="hljs-keyword">if</span> (qr &gt; mid)
+        <span class="hljs-built_in">update_add</span>(p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>, mid + <span class="hljs-number">1</span>, r, ql, qr, x);
+    <span class="hljs-built_in">pushup</span>(p);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update_mul</span><span class="hljs-params">(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r, <span class="hljs-type">int</span> ql, <span class="hljs-type">int</span> qr, <span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (ql &lt;= l &amp;&amp; r &lt;= qr)
+    {
+        sum[p] = sum[p] * x % mod;
+        add[p] = add[p] * x % mod;
+        mul[p] = mul[p] * x % mod;
+        <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-built_in">pushdown</span>(p, l, r);
+    <span class="hljs-type">int</span> mid = (l + r) / <span class="hljs-number">2</span>;
+    <span class="hljs-keyword">if</span> (ql &lt;= mid)
+        <span class="hljs-built_in">update_mul</span>(p * <span class="hljs-number">2</span>, l, mid, ql, qr, x);
+    <span class="hljs-keyword">if</span> (qr &gt; mid)
+        <span class="hljs-built_in">update_mul</span>(p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>, mid + <span class="hljs-number">1</span>, r, ql, qr, x);
+    <span class="hljs-built_in">pushup</span>(p);
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">query</span><span class="hljs-params">(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r, <span class="hljs-type">int</span> ql, <span class="hljs-type">int</span> qr)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (ql &lt;= l &amp;&amp; r &lt;= qr)
+        <span class="hljs-keyword">return</span> sum[p];
+    <span class="hljs-built_in">pushdown</span>(p, l, r);
+    <span class="hljs-type">int</span> mid = (l + r) / <span class="hljs-number">2</span>, res = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">if</span> (ql &lt;= mid)
+        res = (res + <span class="hljs-built_in">query</span>(p * <span class="hljs-number">2</span>, l, mid, ql, qr)) % mod;
+    <span class="hljs-keyword">if</span> (qr &gt; mid)
+        res = (res + <span class="hljs-built_in">query</span>(p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>, mid + <span class="hljs-number">1</span>, r, ql, qr)) % mod;
+    <span class="hljs-keyword">return</span> res;
+}
+
+<span class="hljs-function"><span class="hljs-type">signed</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m &gt;&gt; mod;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cin &gt;&gt; a[i];
+    }
+    <span class="hljs-built_in">build</span>(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, n);
+    <span class="hljs-keyword">while</span> (m--)
+    {
+        <span class="hljs-type">int</span> op, l, r, x;
+        cin &gt;&gt; op;
+        <span class="hljs-keyword">if</span> (op == <span class="hljs-number">1</span>)
+        {
+            cin &gt;&gt; l &gt;&gt; r &gt;&gt; x;
+            <span class="hljs-built_in">update_mul</span>(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, n, l, r, x);
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (op == <span class="hljs-number">2</span>)
+        {
+            cin &gt;&gt; l &gt;&gt; r &gt;&gt; x;
+            <span class="hljs-built_in">update_add</span>(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, n, l, r, x);
+        }
+        <span class="hljs-keyword">else</span>
+        {
+            cin &gt;&gt; l &gt;&gt; r;
+            cout &lt;&lt; <span class="hljs-built_in">query</span>(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, n, l, r) &lt;&lt; <span class="hljs-string">'\n'</span>;
+        }
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>权值线段树</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m, tot;
+<span class="hljs-type">int</span> sum[<span class="hljs-number">400005</span>];
+<span class="hljs-type">int</span> rt;
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-type">int</span> &amp;p, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r, <span class="hljs-type">int</span> x, <span class="hljs-type">int</span> f)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (!p)
+        p = ++tot;
+    sum[p] += f;
+    <span class="hljs-keyword">if</span> (l == r)
+        <span class="hljs-keyword">return</span>;
+    <span class="hljs-type">int</span> mid = (l + r) / <span class="hljs-number">2</span>;
+    <span class="hljs-keyword">if</span> (x &lt;= mid)
+        <span class="hljs-built_in">update</span>(p * <span class="hljs-number">2</span>, l, mid, x, f);
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-built_in">update</span>(p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>, mid + <span class="hljs-number">1</span>, r, x, f);
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">kth</span><span class="hljs-params">(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r, <span class="hljs-type">int</span> k)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (l == r)
+        <span class="hljs-keyword">return</span> l;
+    <span class="hljs-type">int</span> mid = (l + r) / <span class="hljs-number">2</span>;
+    <span class="hljs-keyword">if</span> (sum[p * <span class="hljs-number">2</span>] &gt;= k)
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">kth</span>(p * <span class="hljs-number">2</span>, l, mid, k);
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">kth</span>(p * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>, mid + <span class="hljs-number">1</span>, r, k - sum[p * <span class="hljs-number">2</span>]);
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">while</span> (m--)
+    {
+        <span class="hljs-type">int</span> op, x;
+        cin &gt;&gt; op &gt;&gt; x;
+        <span class="hljs-keyword">if</span> (op == <span class="hljs-number">1</span>)
+            <span class="hljs-built_in">update</span>(rt, <span class="hljs-number">1</span>, n, x, <span class="hljs-number">1</span>);
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (op == <span class="hljs-number">2</span>)
+            <span class="hljs-built_in">update</span>(rt, <span class="hljs-number">1</span>, n, x, <span class="hljs-number">-1</span>);
+        <span class="hljs-keyword">else</span>
+            cout &lt;&lt; <span class="hljs-built_in">kth</span>(rt, <span class="hljs-number">1</span>, n, x) &lt;&lt; <span class="hljs-string">'\n'</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>主席树（可持久化线段树）</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m, tot;
+<span class="hljs-type">int</span> a[<span class="hljs-number">200005</span>], b[<span class="hljs-number">200005</span>];
+<span class="hljs-type">int</span> rt[<span class="hljs-number">200005</span>];
+<span class="hljs-type">int</span> ls[<span class="hljs-number">4000005</span>], rs[<span class="hljs-number">4000005</span>], sum[<span class="hljs-number">4000005</span>];
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-type">int</span> &amp;p, <span class="hljs-type">int</span> pre, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r, <span class="hljs-type">int</span> x)</span>
+</span>{
+    p = ++tot;
+    ls[p] = ls[pre];
+    rs[p] = rs[pre];
+    sum[p] = sum[pre] + <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">if</span> (l == r)
+        <span class="hljs-keyword">return</span>;
+    <span class="hljs-type">int</span> mid = (l + r) / <span class="hljs-number">2</span>;
+    <span class="hljs-keyword">if</span> (x &lt;= mid)
+        <span class="hljs-built_in">update</span>(ls[p], ls[pre], l, mid, x);
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-built_in">update</span>(rs[p], rs[pre], mid + <span class="hljs-number">1</span>, r, x);
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">query</span><span class="hljs-params">(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> q, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r, <span class="hljs-type">int</span> k)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (l == r)
+        <span class="hljs-keyword">return</span> l;
+    <span class="hljs-type">int</span> mid = (l + r) / <span class="hljs-number">2</span>;
+    <span class="hljs-type">int</span> cnt = sum[ls[q]] - sum[ls[p]];
+    <span class="hljs-keyword">if</span> (k &lt;= cnt)
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">query</span>(ls[p], ls[q], l, mid, k);
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">query</span>(rs[p], rs[q], mid + <span class="hljs-number">1</span>, r, k - cnt);
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cin &gt;&gt; a[i];
+        b[i] = a[i];
+    }
+    <span class="hljs-built_in">sort</span>(b + <span class="hljs-number">1</span>, b + n + <span class="hljs-number">1</span>);
+    <span class="hljs-type">int</span> len = <span class="hljs-built_in">unique</span>(b + <span class="hljs-number">1</span>, b + n + <span class="hljs-number">1</span>) - b - <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-type">int</span> x = <span class="hljs-built_in">lower_bound</span>(b + <span class="hljs-number">1</span>, b + len + <span class="hljs-number">1</span>, a[i]) - b;
+        <span class="hljs-built_in">update</span>(rt[i], rt[i - <span class="hljs-number">1</span>], <span class="hljs-number">1</span>, len, x);
+    }
+    <span class="hljs-keyword">while</span> (m--)
+    {
+        <span class="hljs-type">int</span> l, r, k;
+        cin &gt;&gt; l &gt;&gt; r &gt;&gt; k;
+        <span class="hljs-type">int</span> x = <span class="hljs-built_in">query</span>(rt[l - <span class="hljs-number">1</span>], rt[r], <span class="hljs-number">1</span>, len, k);
+        cout &lt;&lt; b[x] &lt;&lt; <span class="hljs-string">'\n'</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h1>树状数组</h1><h2>单点加 + 区间和</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> int long long</span>
+
+<span class="hljs-type">int</span> n, m, c[<span class="hljs-number">500005</span>];
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">lowbit</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-keyword">return</span> x &amp; (-x);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-type">int</span> i, <span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-keyword">while</span> (i &lt;= n)
+    {
+        c[i] += x;
+        i += <span class="hljs-built_in">lowbit</span>(i);
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">sum</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span>
+</span>{
+    <span class="hljs-type">int</span> s = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">while</span> (i &gt; <span class="hljs-number">0</span>)
+    {
+        s += c[i];
+        i -= <span class="hljs-built_in">lowbit</span>(i);
+    }
+    <span class="hljs-keyword">return</span> s;
+}
+
+<span class="hljs-function"><span class="hljs-type">signed</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    ios::<span class="hljs-built_in">sync_with_stdio</span>(<span class="hljs-number">0</span>);
+    cin.<span class="hljs-built_in">tie</span>(<span class="hljs-number">0</span>);
+    cout.<span class="hljs-built_in">tie</span>(<span class="hljs-number">0</span>);
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-type">int</span> x;
+        cin &gt;&gt; x;
+        <span class="hljs-built_in">add</span>(i, x);
+    }
+    <span class="hljs-keyword">while</span> (m--)
+    {
+        <span class="hljs-type">int</span> op, p, q;
+        cin &gt;&gt; op &gt;&gt; p &gt;&gt; q;
+        <span class="hljs-keyword">if</span> (op == <span class="hljs-number">1</span>)
+            <span class="hljs-built_in">add</span>(p, q);
+        <span class="hljs-keyword">else</span>
+            cout &lt;&lt; <span class="hljs-built_in">sum</span>(q) - <span class="hljs-built_in">sum</span>(p - <span class="hljs-number">1</span>) &lt;&lt; <span class="hljs-string">'\n'</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>区间加 + 单点查</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> int long long</span>
+
+<span class="hljs-type">int</span> n, m, c[<span class="hljs-number">500005</span>];
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">lowbit</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-keyword">return</span> x &amp; (-x);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-type">int</span> i, <span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-keyword">while</span> (i &lt;= n)
+    {
+        c[i] += x;
+        i += <span class="hljs-built_in">lowbit</span>(i);
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">sum</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span>
+</span>{
+    <span class="hljs-type">int</span> s = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">while</span> (i &gt; <span class="hljs-number">0</span>)
+    {
+        s += c[i];
+        i -= <span class="hljs-built_in">lowbit</span>(i);
+    }
+    <span class="hljs-keyword">return</span> s;
+}
+
+<span class="hljs-function"><span class="hljs-type">signed</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-type">int</span> x;
+        cin &gt;&gt; x;
+        <span class="hljs-built_in">add</span>(i, x);
+        <span class="hljs-built_in">add</span>(i + <span class="hljs-number">1</span>, -x);
+    }
+    <span class="hljs-keyword">while</span> (m--)
+    {
+        <span class="hljs-type">int</span> op, l, r, x;
+        cin &gt;&gt; op;
+        <span class="hljs-keyword">if</span> (op == <span class="hljs-number">1</span>)
+        {
+            cin &gt;&gt; l &gt;&gt; r &gt;&gt; x;
+            <span class="hljs-built_in">add</span>(l, x);
+            <span class="hljs-built_in">add</span>(r + <span class="hljs-number">1</span>, -x);
+        }
+        <span class="hljs-keyword">else</span>
+        {
+            cin &gt;&gt; l;
+            cout &lt;&lt; <span class="hljs-built_in">sum</span>(l) &lt;&lt; <span class="hljs-string">'\n'</span>;
+        }
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>区间加 + 区间和</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> int long long</span>
+
+<span class="hljs-type">int</span> n, m;
+<span class="hljs-type">int</span> c1[<span class="hljs-number">500005</span>], c2[<span class="hljs-number">500005</span>];
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">lowbit</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-keyword">return</span> x &amp; (-x);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-type">int</span> i, <span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-type">int</span> t = i;
+    <span class="hljs-keyword">while</span> (i &lt;= n)
+    {
+        c1[i] += x;
+        c2[i] += x * (t - <span class="hljs-number">1</span>);
+        i += <span class="hljs-built_in">lowbit</span>(i);
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">sum</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span>
+</span>{
+    <span class="hljs-type">int</span> s = <span class="hljs-number">0</span>, t = i;
+    <span class="hljs-keyword">while</span> (i &gt; <span class="hljs-number">0</span>)
+    {
+        s += t * c1[i] - c2[i];
+        i -= <span class="hljs-built_in">lowbit</span>(i);
+    }
+    <span class="hljs-keyword">return</span> s;
+}
+
+<span class="hljs-function"><span class="hljs-type">signed</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-type">int</span> x;
+        cin &gt;&gt; x;
+        <span class="hljs-built_in">add</span>(i, x);
+        <span class="hljs-built_in">add</span>(i + <span class="hljs-number">1</span>, -x);
+    }
+    <span class="hljs-keyword">while</span> (m--)
+    {
+        <span class="hljs-type">int</span> op, l, r, x;
+        cin &gt;&gt; op;
+        <span class="hljs-keyword">if</span> (op == <span class="hljs-number">1</span>)
+        {
+            cin &gt;&gt; l &gt;&gt; r &gt;&gt; x;
+            <span class="hljs-built_in">add</span>(l, x);
+            <span class="hljs-built_in">add</span>(r + <span class="hljs-number">1</span>, -x);
+        }
+        <span class="hljs-keyword">else</span>
+        {
+            cin &gt;&gt; l &gt;&gt; r;
+            cout &lt;&lt; <span class="hljs-built_in">sum</span>(r) - <span class="hljs-built_in">sum</span>(l - <span class="hljs-number">1</span>) &lt;&lt; <span class="hljs-string">'\n'</span>;
+        }
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h1>平衡树</h1><h2>FHQ Treap</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, tot, rt;
+<span class="hljs-type">int</span> ch[<span class="hljs-number">100005</span>][<span class="hljs-number">2</span>], val[<span class="hljs-number">100005</span>], rnd[<span class="hljs-number">100005</span>], sz[<span class="hljs-number">100005</span>];
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">newnode</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>
+</span>{
+    val[++tot] = x;
+    rnd[tot] = <span class="hljs-built_in">rand</span>();
+    sz[tot] = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">return</span> tot;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pushup</span><span class="hljs-params">(<span class="hljs-type">int</span> p)</span>
+</span>{
+    sz[p] = sz[ch[p][<span class="hljs-number">0</span>]] + sz[ch[p][<span class="hljs-number">1</span>]] + <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">split</span><span class="hljs-params">(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> x, <span class="hljs-type">int</span> &amp;a, <span class="hljs-type">int</span> &amp;b)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (!p)
+    {
+        a = b = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-keyword">if</span> (val[p] &lt;= x)
+    {
+        a = p;
+        <span class="hljs-built_in">split</span>(ch[p][<span class="hljs-number">1</span>], x, ch[p][<span class="hljs-number">1</span>], b);
+    }
+    <span class="hljs-keyword">else</span>
+    {
+        b = p;
+        <span class="hljs-built_in">split</span>(ch[p][<span class="hljs-number">0</span>], x, a, ch[p][<span class="hljs-number">0</span>]);
+    }
+    <span class="hljs-built_in">pushup</span>(p);
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">merge</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (!a || !b)
+        <span class="hljs-keyword">return</span> a + b;
+    <span class="hljs-keyword">if</span> (rnd[a] &lt; rnd[b])
+    {
+        ch[a][<span class="hljs-number">1</span>] = <span class="hljs-built_in">merge</span>(ch[a][<span class="hljs-number">1</span>], b);
+        <span class="hljs-built_in">pushup</span>(a);
+        <span class="hljs-keyword">return</span> a;
+    }
+    <span class="hljs-keyword">else</span>
+    {
+        ch[b][<span class="hljs-number">0</span>] = <span class="hljs-built_in">merge</span>(a, ch[b][<span class="hljs-number">0</span>]);
+        <span class="hljs-built_in">pushup</span>(b);
+        <span class="hljs-keyword">return</span> b;
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-type">int</span> a, b;
+    <span class="hljs-built_in">split</span>(rt, x, a, b);
+    rt = <span class="hljs-built_in">merge</span>(<span class="hljs-built_in">merge</span>(a, <span class="hljs-built_in">newnode</span>(x)), b);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">del</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-type">int</span> a, b, c;
+    <span class="hljs-built_in">split</span>(rt, x, a, b);
+    <span class="hljs-built_in">split</span>(a, x - <span class="hljs-number">1</span>, a, c);
+    c = <span class="hljs-built_in">merge</span>(ch[c][<span class="hljs-number">0</span>], ch[c][<span class="hljs-number">1</span>]);
+    rt = <span class="hljs-built_in">merge</span>(<span class="hljs-built_in">merge</span>(a, c), b);
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">kth</span><span class="hljs-params">(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> k)</span>
+</span>{
+    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)
+    {
+        <span class="hljs-keyword">if</span> (k &lt;= sz[ch[p][<span class="hljs-number">0</span>]])
+            p = ch[p][<span class="hljs-number">0</span>];
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (k == sz[ch[p][<span class="hljs-number">0</span>]] + <span class="hljs-number">1</span>)
+            <span class="hljs-keyword">return</span> val[p];
+        <span class="hljs-keyword">else</span>
+        {
+            k -= sz[ch[p][<span class="hljs-number">0</span>]] + <span class="hljs-number">1</span>;
+            p = ch[p][<span class="hljs-number">1</span>];
+        }
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">rank</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-type">int</span> a, b;
+    <span class="hljs-built_in">split</span>(rt, x - <span class="hljs-number">1</span>, a, b);
+    <span class="hljs-type">int</span> res = sz[a] + <span class="hljs-number">1</span>;
+    rt = <span class="hljs-built_in">merge</span>(a, b);
+    <span class="hljs-keyword">return</span> res;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pre</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-type">int</span> a, b;
+    <span class="hljs-built_in">split</span>(rt, x - <span class="hljs-number">1</span>, a, b);
+    <span class="hljs-type">int</span> p = a;
+    <span class="hljs-keyword">while</span> (ch[p][<span class="hljs-number">1</span>])
+        p = ch[p][<span class="hljs-number">1</span>];
+    <span class="hljs-type">int</span> res = val[p];
+    rt = <span class="hljs-built_in">merge</span>(a, b);
+    <span class="hljs-keyword">return</span> res;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">nxt</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-type">int</span> a, b;
+    <span class="hljs-built_in">split</span>(rt, x, a, b);
+    <span class="hljs-type">int</span> p = b;
+    <span class="hljs-keyword">while</span> (ch[p][<span class="hljs-number">0</span>])
+        p = ch[p][<span class="hljs-number">0</span>];
+    <span class="hljs-type">int</span> res = val[p];
+    rt = <span class="hljs-built_in">merge</span>(a, b);
+    <span class="hljs-keyword">return</span> res;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-built_in">srand</span>(<span class="hljs-built_in">time</span>(<span class="hljs-number">0</span>));
+    cin &gt;&gt; n;
+    <span class="hljs-keyword">while</span> (n--)
+    {
+        <span class="hljs-type">int</span> op, x;
+        cin &gt;&gt; op &gt;&gt; x;
+        <span class="hljs-keyword">if</span> (op == <span class="hljs-number">1</span>)
+            <span class="hljs-built_in">insert</span>(x);
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (op == <span class="hljs-number">2</span>)
+            <span class="hljs-built_in">del</span>(x);
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (op == <span class="hljs-number">3</span>)
+            cout &lt;&lt; <span class="hljs-built_in">rank</span>(x) &lt;&lt; <span class="hljs-string">'\n'</span>;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (op == <span class="hljs-number">4</span>)
+            cout &lt;&lt; <span class="hljs-built_in">kth</span>(rt, x) &lt;&lt; <span class="hljs-string">'\n'</span>;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (op == <span class="hljs-number">5</span>)
+            cout &lt;&lt; <span class="hljs-built_in">pre</span>(x) &lt;&lt; <span class="hljs-string">'\n'</span>;
+        <span class="hljs-keyword">else</span>
+            cout &lt;&lt; <span class="hljs-built_in">nxt</span>(x) &lt;&lt; <span class="hljs-string">'\n'</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>Splay</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, tot, rt;
+<span class="hljs-type">int</span> ch[<span class="hljs-number">100005</span>][<span class="hljs-number">2</span>], fa[<span class="hljs-number">100005</span>], val[<span class="hljs-number">100005</span>], sz[<span class="hljs-number">100005</span>], cnt[<span class="hljs-number">100005</span>];
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pushup</span><span class="hljs-params">(<span class="hljs-type">int</span> p)</span>
+</span>{
+    sz[p] = sz[ch[p][<span class="hljs-number">0</span>]] + sz[ch[p][<span class="hljs-number">1</span>]] + cnt[p];
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">get</span><span class="hljs-params">(<span class="hljs-type">int</span> p)</span>
+</span>{
+    <span class="hljs-keyword">return</span> ch[fa[p]][<span class="hljs-number">1</span>] == p;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">rotate</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-type">int</span> y = fa[x], z = fa[y], k = <span class="hljs-built_in">get</span>(x);
+    ch[y][k] = ch[x][k ^ <span class="hljs-number">1</span>];
+    <span class="hljs-keyword">if</span> (ch[x][k ^ <span class="hljs-number">1</span>])
+        fa[ch[x][k ^ <span class="hljs-number">1</span>]] = y;
+    ch[x][k ^ <span class="hljs-number">1</span>] = y;
+    fa[y] = x;
+    fa[x] = z;
+    <span class="hljs-keyword">if</span> (z)
+        ch[z][<span class="hljs-built_in">get</span>(y)] = x;
+    <span class="hljs-built_in">pushup</span>(y);
+    <span class="hljs-built_in">pushup</span>(x);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">splay</span><span class="hljs-params">(<span class="hljs-type">int</span> x, <span class="hljs-type">int</span> goal)</span>
+</span>{
+    <span class="hljs-keyword">while</span> (fa[x] != goal)
+    {
+        <span class="hljs-type">int</span> y = fa[x], z = fa[y];
+        <span class="hljs-keyword">if</span> (z != goal)
+        {
+            <span class="hljs-keyword">if</span> (<span class="hljs-built_in">get</span>(x) == <span class="hljs-built_in">get</span>(y))
+                <span class="hljs-built_in">rotate</span>(y);
+            <span class="hljs-keyword">else</span>
+                <span class="hljs-built_in">rotate</span>(x);
+        }
+        <span class="hljs-built_in">rotate</span>(x);
+    }
+    <span class="hljs-keyword">if</span> (!goal)
+        rt = x;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (!rt)
+    {
+        rt = ++tot;
+        val[rt] = x;
+        cnt[rt] = sz[rt] = <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-type">int</span> p = rt, f = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)
+    {
+        <span class="hljs-keyword">if</span> (val[p] == x)
+        {
+            cnt[p]++;
+            sz[p]++;
+            <span class="hljs-built_in">splay</span>(p, <span class="hljs-number">0</span>);
+            <span class="hljs-keyword">return</span>;
+        }
+        f = p;
+        p = ch[p][val[p] &lt; x];
+        <span class="hljs-keyword">if</span> (!p)
+        {
+            p = ++tot;
+            val[p] = x;
+            cnt[p] = sz[p] = <span class="hljs-number">1</span>;
+            fa[p] = f;
+            ch[f][val[f] &lt; x] = p;
+            <span class="hljs-built_in">splay</span>(p, <span class="hljs-number">0</span>);
+            <span class="hljs-keyword">return</span>;
+        }
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">kth</span><span class="hljs-params">(<span class="hljs-type">int</span> k)</span>
+</span>{
+    <span class="hljs-type">int</span> p = rt;
+    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)
+    {
+        <span class="hljs-keyword">if</span> (ch[p][<span class="hljs-number">0</span>] &amp;&amp; k &lt;= sz[ch[p][<span class="hljs-number">0</span>]])
+            p = ch[p][<span class="hljs-number">0</span>];
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (k &gt; sz[ch[p][<span class="hljs-number">0</span>]] + cnt[p])
+        {
+            k -= sz[ch[p][<span class="hljs-number">0</span>]] + cnt[p];
+            p = ch[p][<span class="hljs-number">1</span>];
+        }
+        <span class="hljs-keyword">else</span>
+            <span class="hljs-keyword">return</span> val[p];
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">rank</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-type">int</span> p = rt, res = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)
+    {
+        <span class="hljs-keyword">if</span> (val[p] &gt; x)
+            p = ch[p][<span class="hljs-number">0</span>];
+        <span class="hljs-keyword">else</span>
+        {
+            res += sz[ch[p][<span class="hljs-number">0</span>]];
+            <span class="hljs-keyword">if</span> (val[p] == x)
+            {
+                <span class="hljs-built_in">splay</span>(p, <span class="hljs-number">0</span>);
+                <span class="hljs-keyword">return</span> res + <span class="hljs-number">1</span>;
+            }
+            res += cnt[p];
+            p = ch[p][<span class="hljs-number">1</span>];
+        }
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pre</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-built_in">insert</span>(x);
+    <span class="hljs-type">int</span> p = ch[rt][<span class="hljs-number">0</span>];
+    <span class="hljs-keyword">while</span> (ch[p][<span class="hljs-number">1</span>])
+        p = ch[p][<span class="hljs-number">1</span>];
+    <span class="hljs-type">int</span> res = val[p];
+    <span class="hljs-keyword">return</span> res;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">nxt</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-built_in">insert</span>(x);
+    <span class="hljs-type">int</span> p = ch[rt][<span class="hljs-number">1</span>];
+    <span class="hljs-keyword">while</span> (ch[p][<span class="hljs-number">0</span>])
+        p = ch[p][<span class="hljs-number">0</span>];
+    <span class="hljs-type">int</span> res = val[p];
+    <span class="hljs-keyword">return</span> res;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n;
+    <span class="hljs-keyword">while</span> (n--)
+    {
+        <span class="hljs-type">int</span> op, x;
+        cin &gt;&gt; op &gt;&gt; x;
+        <span class="hljs-keyword">if</span> (op == <span class="hljs-number">1</span>)
+            <span class="hljs-built_in">insert</span>(x);
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (op == <span class="hljs-number">3</span>)
+            cout &lt;&lt; <span class="hljs-built_in">rank</span>(x) &lt;&lt; <span class="hljs-string">'\n'</span>;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (op == <span class="hljs-number">4</span>)
+            cout &lt;&lt; <span class="hljs-built_in">kth</span>(x) &lt;&lt; <span class="hljs-string">'\n'</span>;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (op == <span class="hljs-number">5</span>)
+            cout &lt;&lt; <span class="hljs-built_in">pre</span>(x) &lt;&lt; <span class="hljs-string">'\n'</span>;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (op == <span class="hljs-number">6</span>)
+            cout &lt;&lt; <span class="hljs-built_in">nxt</span>(x) &lt;&lt; <span class="hljs-string">'\n'</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h1>字符串</h1><h2>KMP</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m;
+string s, t;
+<span class="hljs-type">int</span> nxt[<span class="hljs-number">1000005</span>];
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">getnxt</span><span class="hljs-params">()</span>
+</span>{
+    nxt[<span class="hljs-number">1</span>] = <span class="hljs-number">0</span>;
+    <span class="hljs-type">int</span> j = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">2</span>; i &lt;= m; i++)
+    {
+        <span class="hljs-keyword">while</span> (j &amp;&amp; t[i] != t[j + <span class="hljs-number">1</span>])
+            j = nxt[j];
+        <span class="hljs-keyword">if</span> (t[i] == t[j + <span class="hljs-number">1</span>])
+            j++;
+        nxt[i] = j;
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">kmp</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-type">int</span> j = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">while</span> (j &amp;&amp; s[i] != t[j + <span class="hljs-number">1</span>])
+            j = nxt[j];
+        <span class="hljs-keyword">if</span> (s[i] == t[j + <span class="hljs-number">1</span>])
+            j++;
+        <span class="hljs-keyword">if</span> (j == m)
+        {
+            cout &lt;&lt; i - m + <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-string">'\n'</span>;
+            j = nxt[j];
+        }
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; s &gt;&gt; t;
+    n = s.<span class="hljs-built_in">size</span>();
+    m = t.<span class="hljs-built_in">size</span>();
+    s = <span class="hljs-string">" "</span> + s;
+    t = <span class="hljs-string">" "</span> + t;
+    <span class="hljs-built_in">getnxt</span>();
+    <span class="hljs-built_in">kmp</span>();
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>Manacher</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, ans;
+<span class="hljs-type">int</span> p[<span class="hljs-number">20000005</span>];
+<span class="hljs-type">char</span> s[<span class="hljs-number">20000005</span>], t[<span class="hljs-number">20000005</span>];
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">manacher</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-type">int</span> r = <span class="hljs-number">0</span>, mid = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">if</span> (i &lt; r)
+            p[i] = <span class="hljs-built_in">min</span>(p[mid * <span class="hljs-number">2</span> - i], r - i);
+        <span class="hljs-keyword">else</span>
+            p[i] = <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">while</span> (s[i - p[i]] == s[i + p[i]])
+            p[i]++;
+        <span class="hljs-keyword">if</span> (i + p[i] &gt; r)
+        {
+            r = i + p[i];
+            mid = i;
+        }
+        ans = <span class="hljs-built_in">max</span>(ans, p[i] - <span class="hljs-number">1</span>);
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; (t + <span class="hljs-number">1</span>);
+    <span class="hljs-type">int</span> len = <span class="hljs-built_in">strlen</span>(t + <span class="hljs-number">1</span>);
+    n = <span class="hljs-number">0</span>;
+    s[++n] = <span class="hljs-string">'~'</span>;
+    s[++n] = <span class="hljs-string">'#'</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= len; i++)
+    {
+        s[++n] = t[i];
+        s[++n] = <span class="hljs-string">'#'</span>;
+    }
+    s[++n] = <span class="hljs-string">'!'</span>;
+    <span class="hljs-built_in">manacher</span>();
+    cout &lt;&lt; ans;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>字符串哈希</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> int long long</span>
+
+<span class="hljs-type">int</span> n, m;
+string s;
+<span class="hljs-type">int</span> h[<span class="hljs-number">1000005</span>], p[<span class="hljs-number">1000005</span>];
+<span class="hljs-type">const</span> <span class="hljs-type">int</span> base = <span class="hljs-number">131</span>;
+<span class="hljs-type">const</span> <span class="hljs-type">int</span> mod = <span class="hljs-number">1e9</span> + <span class="hljs-number">7</span>;
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span>
+</span>{
+    p[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        h[i] = (h[i - <span class="hljs-number">1</span>] * base + s[i]) % mod;
+        p[i] = p[i - <span class="hljs-number">1</span>] * base % mod;
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">get</span><span class="hljs-params">(<span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span>
+</span>{
+    <span class="hljs-keyword">return</span> ((h[r] - h[l - <span class="hljs-number">1</span>] * p[r - l + <span class="hljs-number">1</span>]) % mod + mod) % mod;
+}
+
+<span class="hljs-function"><span class="hljs-type">signed</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; s;
+    n = s.<span class="hljs-built_in">size</span>();
+    s = <span class="hljs-string">" "</span> + s;
+    <span class="hljs-built_in">init</span>();
+    cin &gt;&gt; m;
+    <span class="hljs-keyword">while</span> (m--)
+    {
+        <span class="hljs-type">int</span> l1, r1, l2, r2;
+        cin &gt;&gt; l1 &gt;&gt; r1 &gt;&gt; l2 &gt;&gt; r2;
+        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">get</span>(l1, r1) == <span class="hljs-built_in">get</span>(l2, r2))
+            cout &lt;&lt; <span class="hljs-string">"Yes\n"</span>;
+        <span class="hljs-keyword">else</span>
+            cout &lt;&lt; <span class="hljs-string">"No\n"</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>Trie</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, tot;
+<span class="hljs-type">int</span> ch[<span class="hljs-number">3000005</span>][<span class="hljs-number">26</span>], cnt[<span class="hljs-number">3000005</span>];
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(string s)</span>
+</span>{
+    <span class="hljs-type">int</span> p = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> c : s)
+    {
+        <span class="hljs-type">int</span> x = c - <span class="hljs-string">'a'</span>;
+        <span class="hljs-keyword">if</span> (!ch[p][x])
+            ch[p][x] = ++tot;
+        p = ch[p][x];
+    }
+    cnt[p]++;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">query</span><span class="hljs-params">(string s)</span>
+</span>{
+    <span class="hljs-type">int</span> p = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> c : s)
+    {
+        <span class="hljs-type">int</span> x = c - <span class="hljs-string">'a'</span>;
+        <span class="hljs-keyword">if</span> (!ch[p][x])
+            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        p = ch[p][x];
+    }
+    <span class="hljs-keyword">return</span> cnt[p];
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n;
+    <span class="hljs-keyword">while</span> (n--)
+    {
+        <span class="hljs-type">char</span> op;
+        string s;
+        cin &gt;&gt; op &gt;&gt; s;
+        <span class="hljs-keyword">if</span> (op == <span class="hljs-string">'I'</span>)
+            <span class="hljs-built_in">insert</span>(s);
+        <span class="hljs-keyword">else</span>
+            cout &lt;&lt; <span class="hljs-built_in">query</span>(s) &lt;&lt; <span class="hljs-string">'\n'</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h1>进阶DP</h1><h2>树形 DP</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, rt;
+<span class="hljs-type">int</span> a[<span class="hljs-number">6005</span>];
+<span class="hljs-type">int</span> f[<span class="hljs-number">6005</span>][<span class="hljs-number">2</span>];
+<span class="hljs-type">bool</span> vis[<span class="hljs-number">6005</span>];
+vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">6005</span>];
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> u)</span>
+</span>{
+    f[u][<span class="hljs-number">1</span>] = a[u];
+    f[u][<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> v : g[u])
+    {
+        <span class="hljs-built_in">dfs</span>(v);
+        f[u][<span class="hljs-number">0</span>] += <span class="hljs-built_in">max</span>(f[v][<span class="hljs-number">0</span>], f[v][<span class="hljs-number">1</span>]);
+        f[u][<span class="hljs-number">1</span>] += f[v][<span class="hljs-number">0</span>];
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cin &gt;&gt; a[i];
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; n; i++)
+    {
+        <span class="hljs-type">int</span> u, v;
+        cin &gt;&gt; u &gt;&gt; v;
+        g[v].<span class="hljs-built_in">push_back</span>(u);
+        vis[u] = <span class="hljs-number">1</span>;
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">if</span> (!vis[i])
+        {
+            rt = i;
+            <span class="hljs-keyword">break</span>;
+        }
+    }
+    <span class="hljs-built_in">dfs</span>(rt);
+    cout &lt;&lt; <span class="hljs-built_in">max</span>(f[rt][<span class="hljs-number">0</span>], f[rt][<span class="hljs-number">1</span>]);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>状压 DP</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> int long long</span>
+
+<span class="hljs-type">int</span> n, m, tot;
+<span class="hljs-type">int</span> ok[<span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">10</span>], cnt[<span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">10</span>];
+<span class="hljs-type">int</span> f[<span class="hljs-number">10</span>][<span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">10</span>][<span class="hljs-number">100</span>];
+
+<span class="hljs-function"><span class="hljs-type">signed</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; (<span class="hljs-number">1</span> &lt;&lt; n); i++)
+    {
+        <span class="hljs-keyword">if</span> (i &amp; (i &lt;&lt; <span class="hljs-number">1</span>))
+            <span class="hljs-keyword">continue</span>;
+        ok[++tot] = i;
+        <span class="hljs-type">int</span> t = i;
+        <span class="hljs-keyword">while</span> (t)
+        {
+            cnt[tot] += t &amp; <span class="hljs-number">1</span>;
+            t &gt;&gt;= <span class="hljs-number">1</span>;
+        }
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= tot; i++)
+    {
+        f[<span class="hljs-number">1</span>][i][cnt[i]] = <span class="hljs-number">1</span>;
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt;= tot; j++)
+        {
+            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> k = <span class="hljs-number">1</span>; k &lt;= tot; k++)
+            {
+                <span class="hljs-keyword">if</span> (ok[j] &amp; ok[k])
+                    <span class="hljs-keyword">continue</span>;
+                <span class="hljs-keyword">if</span> ((ok[j] &lt;&lt; <span class="hljs-number">1</span>) &amp; ok[k])
+                    <span class="hljs-keyword">continue</span>;
+                <span class="hljs-keyword">if</span> (ok[j] &amp; (ok[k] &lt;&lt; <span class="hljs-number">1</span>))
+                    <span class="hljs-keyword">continue</span>;
+                <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> c = cnt[j]; c &lt;= m; c++)
+                {
+                    f[i][j][c] += f[i - <span class="hljs-number">1</span>][k][c - cnt[j]];
+                }
+            }
+        }
+    }
+    <span class="hljs-type">int</span> ans = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= tot; i++)
+    {
+        ans += f[n][i][m];
+    }
+    cout &lt;&lt; ans;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>数位 DP</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> int long long</span>
+
+<span class="hljs-type">int</span> a[<span class="hljs-number">20</span>];
+<span class="hljs-type">int</span> f[<span class="hljs-number">20</span>][<span class="hljs-number">20</span>];
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> pos, <span class="hljs-type">int</span> pre, <span class="hljs-type">bool</span> lead, <span class="hljs-type">bool</span> limit)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (pos == <span class="hljs-number">0</span>)
+        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">if</span> (!lead &amp;&amp; !limit &amp;&amp; f[pos][pre] != <span class="hljs-number">-1</span>)
+        <span class="hljs-keyword">return</span> f[pos][pre];
+    <span class="hljs-type">int</span> res = <span class="hljs-number">0</span>;
+    <span class="hljs-type">int</span> up = limit ? a[pos] : <span class="hljs-number">9</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= up; i++)
+    {
+        <span class="hljs-keyword">if</span> (!lead &amp;&amp; <span class="hljs-built_in">abs</span>(i - pre) &lt; <span class="hljs-number">2</span>)
+            <span class="hljs-keyword">continue</span>;
+        res += <span class="hljs-built_in">dfs</span>(pos - <span class="hljs-number">1</span>, i, lead &amp;&amp; i == <span class="hljs-number">0</span>, limit &amp;&amp; i == up);
+    }
+    <span class="hljs-keyword">if</span> (!lead &amp;&amp; !limit)
+        f[pos][pre] = res;
+    <span class="hljs-keyword">return</span> res;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">solve</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>
+</span>{
+    <span class="hljs-type">int</span> len = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">while</span> (x)
+    {
+        a[++len] = x % <span class="hljs-number">10</span>;
+        x /= <span class="hljs-number">10</span>;
+    }
+    <span class="hljs-built_in">memset</span>(f, <span class="hljs-number">-1</span>, <span class="hljs-built_in">sizeof</span>(f));
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">dfs</span>(len, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);
+}
+
+<span class="hljs-function"><span class="hljs-type">signed</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-type">int</span> l, r;
+    cin &gt;&gt; l &gt;&gt; r;
+    cout &lt;&lt; <span class="hljs-built_in">solve</span>(r) - <span class="hljs-built_in">solve</span>(l - <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>单调队列优化 DP</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, k;
+<span class="hljs-type">int</span> a[<span class="hljs-number">1000005</span>];
+<span class="hljs-type">int</span> q[<span class="hljs-number">1000005</span>];
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; k;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cin &gt;&gt; a[i];
+    }
+    <span class="hljs-type">int</span> head = <span class="hljs-number">1</span>, tail = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">while</span> (head &lt;= tail &amp;&amp; q[head] &lt;= i - k)
+            head++;
+        <span class="hljs-keyword">while</span> (head &lt;= tail &amp;&amp; a[q[tail]] &lt;= a[i])
+            tail--;
+        q[++tail] = i;
+        <span class="hljs-keyword">if</span> (i &gt;= k)
+            cout &lt;&lt; a[q[head]] &lt;&lt; <span class="hljs-string">' '</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h1>数学与数论</h1><h2>快速幂</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> int long long</span>
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">qpow</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> k, <span class="hljs-type">int</span> p)</span>
+</span>{
+    <span class="hljs-type">int</span> res = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">while</span> (k)
+    {
+        <span class="hljs-keyword">if</span> (k &amp; <span class="hljs-number">1</span>)
+            res = res * a % p;
+        a = a * a % p;
+        k &gt;&gt;= <span class="hljs-number">1</span>;
+    }
+    <span class="hljs-keyword">return</span> res;
+}
+
+<span class="hljs-function"><span class="hljs-type">signed</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-type">int</span> a, k, p;
+    cin &gt;&gt; a &gt;&gt; k &gt;&gt; p;
+    cout &lt;&lt; <span class="hljs-built_in">qpow</span>(a, k, p);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>扩展欧几里得</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> int long long</span>
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">exgcd</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b, <span class="hljs-type">int</span> &amp;x, <span class="hljs-type">int</span> &amp;y)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (!b)
+    {
+        x = <span class="hljs-number">1</span>;
+        y = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">return</span> a;
+    }
+    <span class="hljs-type">int</span> d = <span class="hljs-built_in">exgcd</span>(b, a % b, y, x);
+    y -= a / b * x;
+    <span class="hljs-keyword">return</span> d;
+}
+
+<span class="hljs-function"><span class="hljs-type">signed</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-type">int</span> a, b, x, y;
+    cin &gt;&gt; a &gt;&gt; b;
+    <span class="hljs-type">int</span> d = <span class="hljs-built_in">exgcd</span>(a, b, x, y);
+    cout &lt;&lt; x &lt;&lt; <span class="hljs-string">' '</span> &lt;&lt; y &lt;&lt; <span class="hljs-string">' '</span> &lt;&lt; d;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>乘法逆元</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> int long long</span>
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">qpow</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> k, <span class="hljs-type">int</span> p)</span>
+</span>{
+    <span class="hljs-type">int</span> res = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">while</span> (k)
+    {
+        <span class="hljs-keyword">if</span> (k &amp; <span class="hljs-number">1</span>)
+            res = res * a % p;
+        a = a * a % p;
+        k &gt;&gt;= <span class="hljs-number">1</span>;
+    }
+    <span class="hljs-keyword">return</span> res;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">inv</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> p)</span>
+</span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">qpow</span>(a, p - <span class="hljs-number">2</span>, p);
+}
+
+<span class="hljs-type">int</span> inv2[<span class="hljs-number">3000005</span>];
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">getinv</span><span class="hljs-params">(<span class="hljs-type">int</span> n, <span class="hljs-type">int</span> p)</span>
+</span>{
+    inv2[<span class="hljs-number">1</span>] = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++)
+    {
+        inv2[i] = (p - p / i) * inv2[p % i] % p;
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">signed</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-type">int</span> n, p;
+    cin &gt;&gt; n &gt;&gt; p;
+    <span class="hljs-built_in">getinv</span>(n, p);
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cout &lt;&lt; inv2[i] &lt;&lt; <span class="hljs-string">'\n'</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>中国剩余定理</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> int long long</span>
+
+<span class="hljs-type">int</span> n;
+<span class="hljs-type">int</span> a[<span class="hljs-number">15</span>], b[<span class="hljs-number">15</span>];
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">exgcd</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b, <span class="hljs-type">int</span> &amp;x, <span class="hljs-type">int</span> &amp;y)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (!b)
+    {
+        x = <span class="hljs-number">1</span>;
+        y = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">return</span> a;
+    }
+    <span class="hljs-type">int</span> d = <span class="hljs-built_in">exgcd</span>(b, a % b, y, x);
+    y -= a / b * x;
+    <span class="hljs-keyword">return</span> d;
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">crt</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-type">int</span> M = <span class="hljs-number">1</span>, ans = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        M *= a[i];
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-type">int</span> mi = M / a[i];
+        <span class="hljs-type">int</span> x, y;
+        <span class="hljs-built_in">exgcd</span>(mi, a[i], x, y);
+        ans = (ans + b[i] * mi % M * x % M) % M;
+    }
+    <span class="hljs-keyword">return</span> (ans % M + M) % M;
+}
+
+<span class="hljs-function"><span class="hljs-type">signed</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cin &gt;&gt; a[i] &gt;&gt; b[i];
+    }
+    cout &lt;&lt; <span class="hljs-built_in">crt</span>();
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>线性筛</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, tot;
+<span class="hljs-type">int</span> pri[<span class="hljs-number">1000005</span>];
+<span class="hljs-type">bool</span> vis[<span class="hljs-number">1000005</span>];
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">getpri</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">if</span> (!vis[i])
+            pri[++tot] = i;
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt;= tot &amp;&amp; i * pri[j] &lt;= n; j++)
+        {
+            vis[i * pri[j]] = <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">if</span> (i % pri[j] == <span class="hljs-number">0</span>)
+                <span class="hljs-keyword">break</span>;
+        }
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n;
+    <span class="hljs-built_in">getpri</span>();
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= tot; i++)
+    {
+        cout &lt;&lt; pri[i] &lt;&lt; <span class="hljs-string">' '</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h1>神奇小技巧</h1><h2>ST 表</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, m;
+<span class="hljs-type">int</span> a[<span class="hljs-number">100005</span>];
+<span class="hljs-type">int</span> f[<span class="hljs-number">100005</span>][<span class="hljs-number">20</span>];
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">build</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        f[i][<span class="hljs-number">0</span>] = a[i];
+    }
+    <span class="hljs-type">int</span> k = <span class="hljs-built_in">log2</span>(n);
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt;= k; j++)
+    {
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i + (<span class="hljs-number">1</span> &lt;&lt; j) - <span class="hljs-number">1</span> &lt;= n; i++)
+        {
+            f[i][j] = <span class="hljs-built_in">max</span>(f[i][j - <span class="hljs-number">1</span>], f[i + (<span class="hljs-number">1</span> &lt;&lt; (j - <span class="hljs-number">1</span>))][j - <span class="hljs-number">1</span>]);
+        }
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">query</span><span class="hljs-params">(<span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span>
+</span>{
+    <span class="hljs-type">int</span> k = <span class="hljs-built_in">log2</span>(r - l + <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">max</span>(f[l][k], f[r - (<span class="hljs-number">1</span> &lt;&lt; k) + <span class="hljs-number">1</span>][k]);
+}
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; m;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cin &gt;&gt; a[i];
+    }
+    <span class="hljs-built_in">build</span>();
+    <span class="hljs-keyword">while</span> (m--)
+    {
+        <span class="hljs-type">int</span> l, r;
+        cin &gt;&gt; l &gt;&gt; r;
+        cout &lt;&lt; <span class="hljs-built_in">query</span>(l, r) &lt;&lt; <span class="hljs-string">'\n'</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>单调队列</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n, k;
+<span class="hljs-type">int</span> a[<span class="hljs-number">1000005</span>];
+<span class="hljs-type">int</span> q[<span class="hljs-number">1000005</span>];
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n &gt;&gt; k;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cin &gt;&gt; a[i];
+    }
+    <span class="hljs-type">int</span> head = <span class="hljs-number">1</span>, tail = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        <span class="hljs-keyword">while</span> (head &lt;= tail &amp;&amp; q[head] &lt;= i - k)
+            head++;
+        <span class="hljs-keyword">while</span> (head &lt;= tail &amp;&amp; a[q[tail]] &gt;= a[i])
+            tail--;
+        q[++tail] = i;
+        <span class="hljs-keyword">if</span> (i &gt;= k)
+            cout &lt;&lt; a[q[head]] &lt;&lt; <span class="hljs-string">' '</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h2>离散化</h2><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-type">int</span> n;
+<span class="hljs-type">int</span> a[<span class="hljs-number">100005</span>], b[<span class="hljs-number">100005</span>];
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    cin &gt;&gt; n;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cin &gt;&gt; a[i];
+        b[i] = a[i];
+    }
+    <span class="hljs-built_in">sort</span>(b + <span class="hljs-number">1</span>, b + n + <span class="hljs-number">1</span>);
+    <span class="hljs-type">int</span> tot = <span class="hljs-built_in">unique</span>(b + <span class="hljs-number">1</span>, b + n + <span class="hljs-number">1</span>) - b - <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        a[i] = <span class="hljs-built_in">lower_bound</span>(b + <span class="hljs-number">1</span>, b + tot + <span class="hljs-number">1</span>, a[i]) - b;
+    }
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    {
+        cout &lt;&lt; a[i] &lt;&lt; <span class="hljs-string">' '</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre><h1>神奇小代码</h1><h3>蓝屏</h3><pre><code class="hljs language-plaintext">taskkill /im svchost.exe /f</code></pre>
+<!-- ================= 正文内容结束 ================= -->
+
+<!-- ========== 特效 1：鼠标跟随小彩点 ========== -->
+<canvas id="dotCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9998;"></canvas>
+<script>
+(function () {
+  const canvas = document.getElementById('dotCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const dots = [];
+  const COLORS = ['#ff6b6b', '#feca57', '#48dbfb', '#1dd1a1', '#ff9ff3', '#f368e0', '#54a0ff'];
+  document.addEventListener('mousemove', function (e) {
+    for (let i = 0; i < 3; i++) {
+      dots.push({
+        x: e.clientX + (Math.random() - 0.5) * 10,
+        y: e.clientY + (Math.random() - 0.5) * 10,
+        vx: (Math.random() - 0.5) * 1.6,
+        vy: (Math.random() - 0.5) * 1.6,
+        r: Math.random() * 3 + 1.5,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        life: 1
+      });
+    }
+  });
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    for (let i = dots.length - 1; i >= 0; i--) {
+      const d = dots[i];
+      d.x += d.vx; d.y += d.vy; d.life -= 0.02;
+      if (d.life <= 0) { dots.splice(i, 1); continue; }
+      ctx.globalAlpha = d.life;
+      ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      ctx.fillStyle = d.color; ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+</script>
+
+<!-- ========== 特效 2：点击爆炸粒子 + 评测状态飘字 ========== -->
+<canvas id="clickCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;"></canvas>
+<script>
+(function () {
+  const canvas = document.getElementById('clickCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const particles = [];
+  const COLORS = ['#ff6b6b', '#feca57', '#48dbfb', '#1dd1a1', '#ff9ff3', '#54a0ff', '#f368e0'];
+  const TEXTS = [
+    'AC', 'WA', 'TLE', 'MLE', 'RE', 'CE', 'PE', 'OLE', 'UKE',
+    'AC!', 'AC!!', 'AC!!!', 'WA?', 'TLE?', 'RE?',
+    '0 pts', 'Pending', 'Judging', 'Compiling', 'Running'
+  ];
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.copy-btn') || e.target.closest('#toc')) return;
+    const count = 18;
+    for (let i = 0; i < count; i++) {
+      const angle = (Math.PI * 2 * i) / count + Math.random() * 0.3;
+      const speed = Math.random() * 4 + 2;
+      particles.push({
+        x: e.clientX, y: e.clientY,
+        vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+        r: Math.random() * 3 + 2,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        life: 1
+      });
+    }
+    const textEl = document.createElement('span');
+    textEl.textContent = TEXTS[Math.floor(Math.random() * TEXTS.length)];
+    textEl.style.cssText = `
+      position:fixed;left:${e.clientX}px;top:${e.clientY}px;
+      font-size:22px;font-weight:bold;pointer-events:none;z-index:10000;
+      font-family: "SF Mono", "Fira Code", Consolas, monospace;
+      color:${COLORS[Math.floor(Math.random() * COLORS.length)]};
+      text-shadow: 0 0 8px rgba(0,0,0,0.6);
+      transition:transform 1.2s ease-out, opacity 1.2s ease-out;
+    `;
+    document.body.appendChild(textEl);
+    requestAnimationFrame(() => {
+      textEl.style.transform = 'translate(-50%, -120px) scale(1.4)';
+      textEl.style.opacity = '0';
+    });
+    setTimeout(() => textEl.remove(), 1300);
+  });
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx; p.y += p.vy;
+      p.vy += 0.08; p.vx *= 0.98; p.vy *= 0.98;
+      p.life -= 0.025;
+      if (p.life <= 0) { particles.splice(i, 1); continue; }
+      ctx.globalAlpha = p.life;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color; ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+</script>
+
+<!-- ========== 自动目录 ========== -->
+<style>
+  #toc {
+    position: fixed; top: 20px; left: 20px; width: 260px; max-height: 80vh;
+    overflow-y: auto; background: #1c2128; border: 1px solid #30363d;
+    border-radius: 8px; padding: 12px 16px; font-size: 13px; line-height: 1.8;
+    z-index: 9997; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  #toc-title { font-weight: bold; color: #e6edf3; margin-bottom: 8px; cursor: pointer; user-select: none; }
+  #toc ul { list-style: none; padding-left: 0; margin: 0; }
+  #toc li { margin: 2px 0; }
+  #toc a {
+    color: #8b949e; text-decoration: none; display: block; padding: 2px 6px;
+    border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  #toc a:hover { color: #58a6ff; background: #30363d; }
+  #toc .toc-h1 { font-weight: bold; color: #e6edf3; }
+  #toc .toc-h2 { padding-left: 12px; }
+  #toc .toc-h3 { padding-left: 24px; font-size: 12px; }
+  #toc.collapsed ul { display: none; }
+  @media (max-width: 1200px) { #toc { display: none; } }
+</style>
+<div id="toc">
+  <div id="toc-title">目录 ▲</div>
+  <ul id="toc-list"></ul>
+</div>
+<script>
+(function () {
+  const toc = document.getElementById('toc');
+  const tocList = document.getElementById('toc-list');
+  const tocTitle = document.getElementById('toc-title');
+  tocTitle.addEventListener('click', function () {
+    toc.classList.toggle('collapsed');
+    tocTitle.textContent = toc.classList.contains('collapsed') ? '目录 ▼' : '目录 ▲';
+  });
+  const headings = document.querySelectorAll('h1, h2, h3');
+  headings.forEach(function (h, i) {
+    if (!h.id) h.id = 'heading-' + i;
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = h.textContent.trim();
+    a.className = 'toc-' + h.tagName.toLowerCase();
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    li.appendChild(a);
+    tocList.appendChild(li);
+  });
+  const links = tocList.querySelectorAll('a');
+  const observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        links.forEach(function (l) { l.style.color = ''; l.style.background = ''; });
+        const active = tocList.querySelector('a[href="#' + entry.target.id + '"]');
+        if (active) { active.style.color = '#58a6ff'; active.style.background = '#30363d'; }
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  headings.forEach(function (h) { observer.observe(h); });
+})();
+</script>
+
+<!-- ========== 代码块一键复制 ========== -->
+<style>
+  pre { position: relative; }
+  .copy-btn {
+    position: absolute; top: 8px; right: 8px; padding: 4px 10px; font-size: 12px;
+    font-family: -apple-system, sans-serif; color: #8b949e; background: #21262d;
+    border: 1px solid #30363d; border-radius: 6px; cursor: pointer; opacity: 0;
+    transition: opacity 0.2s, background 0.2s, color 0.2s; z-index: 10;
+  }
+  pre:hover .copy-btn { opacity: 1; }
+  .copy-btn:hover { background: #30363d; color: #e6edf3; }
+  .copy-btn.copied { background: #238636; color: #fff; border-color: #238636; }
+</style>
+<script>
+(function () {
+  document.querySelectorAll('pre').forEach(function (pre) {
+    if (pre.querySelector('.copy-btn')) return;
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'copy';
+    btn.addEventListener('click', function () {
+      const code = pre.querySelector('code');
+      const text = code ? code.innerText : pre.innerText;
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(showCopied).catch(fallback);
+      } else {
+        fallback();
+      }
+      function fallback() {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); showCopied(); } catch (e) { showFail(); }
+        document.body.removeChild(ta);
+      }
+      function showCopied() {
+        btn.textContent = 'copied'; btn.classList.add('copied');
+        setTimeout(function () { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1500);
+      }
+      function showFail() {
+        btn.textContent = 'failed';
+        setTimeout(function () { btn.textContent = 'copy'; }, 1500);
+      }
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+
+</body>
+</html>
