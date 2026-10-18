@@ -1,6 +1,6 @@
 # CSP 第二轮模板
 
-CSP 第二轮（CSP-S Round 2）常用算法模板合集。主站发布在博客园，这里放一份阅读体验更佳的版本。
+CSP-S 第二轮（复赛）常用算法模板合集。本仓库为主站，博客园为同步更新，GitHub Pages 提供带在线编辑器的阅读版本。
 
 ## 关于名字
 
@@ -29,4 +29,4 @@ CSP 第二轮（CSP-S Round 2）常用算法模板合集。主站发布在博客
 
 ## 版权
 
-本文/代码为 Accepted01 原创，发布于博客园与 GitHub Pages。其他平台未经授权禁止转载。
+本项目为 Accepted01 原创，主站为 GitHub（cspsecondround.github.io），博客园（[Accepted01](https://www.cnblogs.com/Accepted01/)）为同步更新。其他平台未经授权禁止转载。
