@@ -4,10 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>C++ Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 body {
   font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-  max-width: 800px;
+  max-width: 1200px; /* 加宽以容纳编辑器 */
   margin: 40px auto;
   padding: 0 20px;
   line-height: 1.7;
@@ -16,7 +19,7 @@ body {
 }
 @media (min-width: 1201px) {
   body {
-    margin-left: max(320px, calc((100vw - 840px) / 2));
+    margin-left: max(320px, calc((100vw - 1200px) / 2));
     margin-right: 0;
   }
 }
@@ -38,6 +41,8 @@ pre {
   border-radius: 8px;
   overflow-x: auto;
   border: 1px solid #3e4451;
+  position: relative;
+  margin: 0; /* 与编辑器并排时去掉默认边距 */
 }
 pre code {
   background: transparent;
@@ -47,6 +52,121 @@ pre code {
   line-height: 1.6;
 }
 
+/* 编辑器并排容器 */
+.editor-row {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  margin: 16px 0;
+  flex-wrap: wrap; /* 小屏自动换行 */
+}
+.editor-row > .code-col {
+  flex: 1 1 48%;
+  min-width: 300px;
+}
+.editor-row > .codemirror-col {
+  flex: 1 1 48%;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #3e4451;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #1e222a;
+}
+
+/* CodeMirror 编辑器容器 */
+.codemirror-wrapper {
+  flex: 1;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+.codemirror-wrapper .CodeMirror {
+  flex: 1;
+  height: 100% !important;
+  font-family: 'Fira Code', 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 13px;
+  background: #282c34;
+  color: #abb2bf;
+  border: none;
+}
+.CodeMirror-gutters {
+  background: #21252b !important;
+  border-right: 1px solid #3e4451 !important;
+}
+.CodeMirror-linenumber {
+  color: #5c6370 !important;
+}
+.CodeMirror-cursor {
+  border-left-color: #528bff !important;
+}
+.CodeMirror-selected {
+  background: #3e4451 !important;
+}
+.CodeMirror-matchingbracket {
+  color: #98c379 !important;
+  font-weight: bold;
+}
+/* 自动补全提示框 */
+.CodeMirror-hints {
+  background: #1c2128 !important;
+  border: 1px solid #3e4451 !important;
+  border-radius: 6px !important;
+  font-family: 'Fira Code', monospace !important;
+  font-size: 13px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+.CodeMirror-hint {
+  color: #c9d1d9 !important;
+  padding: 4px 10px !important;
+}
+li.CodeMirror-hint-active {
+  background: #30363d !important;
+  color: #e6edf3 !important;
+}
+
+/* 编辑器工具栏 */
+.editor-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+  background: #1c2128;
+  border-bottom: 1px solid #30363d;
+  font-size: 12px;
+  color: #8b949e;
+}
+.editor-toolbar .editor-title {
+  font-weight: 600;
+  color: #58a6ff;
+}
+.editor-toolbar .editor-actions button {
+  background: #21262d;
+  color: #8b949e;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  padding: 2px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-left: 6px;
+  transition: 0.2s;
+  font-family: inherit;
+}
+.editor-toolbar .editor-actions button:hover {
+  background: #30363d;
+  color: #e6edf3;
+}
+.editor-toolbar .editor-actions button.run-btn {
+  background: #238636;
+  color: #fff;
+  border-color: #238636;
+}
+.editor-toolbar .editor-actions button.run-btn:hover {
+  background: #2ea043;
+}
+
+/* 原有样式保持不变 */
 blockquote {
   border-left: 4px solid #58a6ff;
   background: #1c2128;
@@ -93,11 +213,63 @@ code.hljs { padding: 3px 5px; }
 .hljs-built_in, .hljs-title.class_ { color: #e5c07b; }
 .hljs-emphasis { font-style: italic; }
 .hljs-strong { font-weight: 700; }
+code, pre code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, Consolas, monospace;
+}
+.codemirror-wrapper .CodeMirror {
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, Consolas, monospace;
+}
+/* 复制按钮保持原有 */
+pre { position: relative; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px; padding: 4px 10px; font-size: 12px;
+  font-family: -apple-system, sans-serif; color: #8b949e; background: #21262d;
+  border: 1px solid #30363d; border-radius: 6px; cursor: pointer; opacity: 0;
+  transition: opacity 0.2s, background 0.2s, color 0.2s; z-index: 10;
+}
+pre:hover .copy-btn { opacity: 1; }
+.copy-btn:hover { background: #30363d; color: #e6edf3; }
+.copy-btn.copied { background: #238636; color: #fff; border-color: #238636; }
+
+/* TOC 保持不变 */
+#toc {
+  position: fixed; top: 20px; left: 20px; width: 260px; max-height: 80vh;
+  overflow-y: auto; background: #1c2128; border: 1px solid #30363d;
+  border-radius: 8px; padding: 12px 16px; font-size: 13px; line-height: 1.8;
+  z-index: 9997; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+#toc-title { font-weight: bold; color: #e6edf3; margin-bottom: 8px; cursor: pointer; user-select: none; }
+#toc ul { list-style: none; padding-left: 0; margin: 0; }
+#toc li { margin: 2px 0; }
+#toc a {
+  color: #8b949e; text-decoration: none; display: block; padding: 2px 6px;
+  border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#toc a:hover { color: #58a6ff; background: #30363d; }
+#toc .toc-h1 { font-weight: bold; color: #e6edf3; }
+#toc .toc-h2 { padding-left: 12px; }
+#toc .toc-h3 { padding-left: 24px; font-size: 12px; }
+#toc.collapsed ul { display: none; }
+@media (max-width: 1200px) { #toc { display: none; } }
+/* 顶部阅读进度条 */
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, #58a6ff, #79c0ff, #a5d6ff);
+  z-index: 10001;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px rgba(88, 166, 255, 0.6);
+  pointer-events: none;
+}
 </style>
 </head>
 <body>
-
+<div id="reading-progress"></div>
 <!-- ================= 正文内容开始 ================= -->
+<!-- 正文全部保留，仅用脚本改造代码块，不手动修改结构 -->
 <h1>数据类型及范围</h1><pre><code class="hljs language-cpp"><span class="hljs-type">bool</span>	<span class="hljs-number">1</span> 个字节	<span class="hljs-number">0</span> 或 <span class="hljs-number">1</span>
 
 <span class="hljs-type">char</span>	<span class="hljs-number">1</span> 个字节	<span class="hljs-number">-128</span> 到 <span class="hljs-number">127</span> 或者 <span class="hljs-number">0</span> 到 <span class="hljs-number">255</span>
@@ -2982,13 +3154,11 @@ vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">600
 <!-- ========== 特效 1：canvas-nest 星空连线（定制深蓝长线版） ========== -->
 <script type="text/javascript">
 !function(){
-  // === 这里是你要求的参数修改区 ===
-  var CONFIG_COLOR = "47,135,193"; // 深蓝色
-  var CONFIG_OPACITY = 0.8;        // 透明度
-  var CONFIG_COUNT = 149;           // 星星数量
-  var CONFIG_MAX = 15000;          // 连线距离 (原版是 6000，改大后线更长)
-  var CONFIG_MOUSE_MAX = 40000;    // 鼠标连线距离
-  // ================================
+  var CONFIG_COLOR = "47,135,193";
+  var CONFIG_OPACITY = 0.8;
+  var CONFIG_COUNT = 125;
+  var CONFIG_MAX = 20000;
+  var CONFIG_MOUSE_MAX = 10000;
 
   function o(){ a=m.width=window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth, c=m.height=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight; }
   function i(){
@@ -3003,8 +3173,8 @@ vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">600
             if(n===y && l>=n.max/2){ i.x-=.03*o, i.y-=.03*m; }
             t=(n.max-l)/n.max;
             r.beginPath();
-            r.lineWidth=t/2; // 线条粗细
-            r.strokeStyle="rgba("+CONFIG_COLOR+","+(t+.2)+")"; // 颜色
+            r.lineWidth=t/2;
+            r.strokeStyle="rgba("+CONFIG_COLOR+","+(t+.2)+")";
             r.moveTo(i.x,i.y);
             r.lineTo(n.x,n.y);
             r.stroke();
@@ -3055,7 +3225,7 @@ vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">600
     '0 pts', 'Pending', 'Judging', 'Compiling', 'Running'
   ];
   document.addEventListener('click', function (e) {
-    if (e.target.closest('.copy-btn') || e.target.closest('#toc')) return;
+    if (e.target.closest('.copy-btn') || e.target.closest('#toc') || e.target.closest('.CodeMirror')) return;
     const count = 18;
     for (let i = 0; i < count; i++) {
       const angle = (Math.PI * 2 * i) / count + Math.random() * 0.3;
@@ -3168,7 +3338,7 @@ vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">600
 })();
 </script>
 
-<!-- ========== 代码块一键复制 ========== -->
+<!-- ========== 代码块一键复制（保留） ========== -->
 <style>
   pre { position: relative; }
   .copy-btn {
@@ -3217,5 +3387,273 @@ vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">600
 })();
 </script>
 
+<!-- ========== 新增：CodeMirror 并排编辑器 ========== -->
+<!-- 引入 CodeMirror 5 核心 + C++ 模式 + 补全 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/dracula.min.css">
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/mode/clike/clike.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/addon/hint/show-hint.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/addon/edit/matchbrackets.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/addon/edit/closebrackets.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/addon/hint/show-hint.min.css">
+
+<!-- 自定义 C++ 补全辅助脚本 (简单基于关键词) -->
+<script>
+  // 简单的 C++ 补全词库
+// C++ 补全词库（扩充版）
+  const cppHints = [
+  // 基础类型
+  'int','long','long long','short','char','float','double','bool','void','auto',
+  'unsigned','signed','size_t','wchar_t','char16_t','char32_t','int8_t','int16_t',
+  'int32_t','int64_t','uint8_t','uint16_t','uint32_t','uint64_t','__int128',
+  // 修饰/存储
+  'const','constexpr','consteval','constinit','static','inline','extern','mutable',
+  'volatile','register','thread_local','virtual','explicit','friend','typename',
+  // 控制
+  'if','else','for','while','do','switch','case','default','break','continue',
+  'return','goto','co_await','co_return','co_yield','throw','try','catch','noexcept',
+  // OOP
+  'struct','class','enum','enum class','union','public','private','protected',
+  'new','delete','this','operator','template','namespace','using','typedef','sizeof',
+  'alignof','decltype','typeid','dynamic_cast','static_cast','const_cast','reinterpret_cast',
+  // 字面/常量
+  'true','false','nullptr','NULL','std',
+  // 常用 STL 容器
+  'string','wstring','vector','list','deque','map','unordered_map','multimap',
+  'set','unordered_set','multiset','stack','queue','priority_queue','bitset','array',
+  'pair','tuple','make_pair','make_tuple','tie','forward_list','valarray',
+  // 迭代器
+  'iterator','const_iterator','reverse_iterator','begin','end','cbegin','cend','rbegin','rend',
+  // 算法
+  'sort','stable_sort','partial_sort','nth_element','reverse','unique','find','find_if',
+  'count','count_if','max','min','max_element','min_element','swap','fill','fill_n',
+  'lower_bound','upper_bound','binary_search','equal_range','merge','for_each','transform',
+  'accumulate','partial_sum','iota','next_permutation','prev_permutation','shuffle','random_shuffle',
+  'remove','remove_if','replace','replace_if','copy','copy_if','copy_n','all_of','any_of','none_of',
+  // 数学
+  'abs','fabs','pow','sqrt','cbrt','floor','ceil','round','trunc','fmod','log','log2','log10',
+  'exp','sin','cos','tan','asin','acos','atan','atan2','hypot','gcd','lcm','__gcd','__builtin_popcount',
+  '__builtin_popcountll','__builtin_clz','__builtin_ctz','__builtin_parity',
+  // I/O
+  'printf','scanf','sprintf','sscanf','puts','gets','putchar','getchar','getline','cin','cout',
+  'cerr','clog','endl','ios','sync_with_stdio','freopen','fopen','fclose','fread','fwrite',
+  // 内存/字符串
+  'malloc','calloc','realloc','free','memset','memcpy','memmove','memcmp','strlen','strcpy',
+  'strncpy','strcat','strcmp','strncmp','strstr','strchr','strrchr','substr','length','append',
+  'push_back','pop_back','push_front','pop_front','emplace_back','emplace_front','emplace',
+  'resize','reserve','capacity','shrink_to_fit','at','front','back','data',
+  // 容器操作
+  'insert','erase','clear','empty','size','contains','first','second',
+  'top','push','pop','assign','get','make_heap','push_heap','pop_heap','sort_heap',
+  // 字符串转换
+  'to_string','stoi','stol','stoll','stoul','stoull','stof','stod','stold',
+  // 函数对象
+  'greater','less','greater_equal','less_equal','equal_to','not_equal_to','plus','minus',
+  'multiplies','divides','modulus','negate','function','bind','ref','cref',
+  // 数值/位运算
+  'numeric_limits','bit_cast','rotl','rotr','popcount','countl_zero','countr_zero',
+  // C++17/20 常用
+  'optional','variant','any','string_view','span','format','ranges','filesystem',
+  'make_unique','make_shared','unique_ptr','shared_ptr','weak_ptr',
+  // 预处理器
+  'main','include','define','undef','ifdef','ifndef','endif','pragma','__cplusplus'
+];
+
+// 为 CodeMirror 注册 C++ 补全（无匹配不弹窗）
+CodeMirror.registerHelper("hint", "cpp", function(cm) {
+  const cur = cm.getCursor();
+  const line = cm.getLine(cur.line);
+  const before = line.slice(0, cur.ch);
+
+  // 取光标前连续标识符字符，允许开头带 #（预处理）
+  const match = before.match(/#?[a-zA-Z_][a-zA-Z0-9_]*$/);
+  if (!match) return null;
+
+  let word = match[0];
+  if (word.startsWith('#')) word = word.slice(1);
+  if (!word) return null;
+
+  const lower = word.toLowerCase();
+  const list = cppHints.filter(item => item.toLowerCase().startsWith(lower));
+  if (!list.length) return null;
+
+  const start = cur.ch - match[0].length + (match[0].startsWith('#') ? 1 : 0);
+  return {
+    list,
+    from: CodeMirror.Pos(cur.line, start),
+    to: CodeMirror.Pos(cur.line, cur.ch)
+  };
+});
+</script>
+
+<script>
+(function() {
+  // 给每个代码块创建并排编辑器
+  const codeBlocks = document.querySelectorAll('pre > code');
+
+  codeBlocks.forEach(function(codeEl) {
+    const pre = codeEl.closest('pre');
+    // 如果已经处理过就跳过
+    if (pre.closest('.editor-row')) return;
+
+    // 获取原始代码文本
+    const codeText = codeEl.innerText;
+
+    // 创建外层并排容器
+    const row = document.createElement('div');
+    row.className = 'editor-row';
+
+    // 左侧：原有的 pre（包裹）
+    const codeCol = document.createElement('div');
+    codeCol.className = 'code-col';
+    pre.parentNode.insertBefore(row, pre);
+    codeCol.appendChild(pre);
+    row.appendChild(codeCol);
+
+    // 右侧：CodeMirror 编辑器容器
+    const cmCol = document.createElement('div');
+    cmCol.className = 'codemirror-col';
+
+    // 工具栏
+    const toolbar = document.createElement('div');
+    toolbar.className = 'editor-toolbar';
+    toolbar.innerHTML = `<span class="editor-title">Editor</span>
+      <span class="editor-actions">
+        <button class="run-btn" title="copy code to clipboard">copy</button>
+        <button class="reset-btn" title="reset to original code">reset</button>
+      </span>`;
+    cmCol.appendChild(toolbar);
+
+    // 编辑器包裹
+    const wrapper = document.createElement('div');
+    wrapper.className = 'codemirror-wrapper';
+    const textarea = document.createElement('textarea');
+    wrapper.appendChild(textarea);
+    cmCol.appendChild(wrapper);
+    row.appendChild(cmCol);
+
+    // 初始化 CodeMirror
+    const cm = CodeMirror.fromTextArea(textarea, {
+      lineNumbers: true,
+      mode: 'text/x-c++src',
+      theme: 'dracula',
+      indentUnit: 4,
+      tabSize: 4,
+      lineWrapping: true,
+      matchBrackets: true,
+      autoCloseBrackets: true,
+      extraKeys: {
+        "Ctrl-Space": "autocomplete",
+        "Cmd-Space": "autocomplete"
+      },
+      hintOptions: {
+        hint: CodeMirror.hint.cpp,
+        completeSingle: false
+      }
+    });
+
+    // 设置内容
+    cm.setValue(codeText);
+
+    // 自动弹出补全（在输入时）
+    // 自动弹出补全（仅在用户键入字母/数字/下划线时触发）
+    cm.on("inputRead", function(instance, changeObj) {
+    // 弹窗已打开时不重复触发，防止闪烁/卡死
+    if (instance.state.completionActive) return;
+
+    // 只处理键盘输入，过滤粘贴/撤销/拖拽
+    if (changeObj.origin && changeObj.origin !== "+input") return;
+
+    // 取最后一个输入字符
+    const ch = changeObj.text[changeObj.text.length - 1];
+    if (!ch) return;
+
+    // 只在输入字母、数字、下划线时触发（不再响应 > 和 .）
+    if (!/[a-zA-Z0-9_]/.test(ch)) return;
+
+    // 光标前必须紧邻标识符字符，避免行中空格后乱弹
+    const cur = instance.getCursor();
+    const line = instance.getLine(cur.line);
+    const before = line.slice(0, cur.ch);
+    if (!/[a-zA-Z0-9_#]$/.test(before)) return;
+
+    instance.showHint({ hint: CodeMirror.hint.cpp, completeSingle: false });
+    });
+
+    // 复制按钮
+    toolbar.querySelector('.run-btn').addEventListener('click', function() {
+      const code = cm.getValue();
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(code).then(() => {
+          this.textContent = 'copied';
+          setTimeout(() => { this.textContent = 'copy'; }, 1200);
+        }).catch(() => {
+          fallbackCopy(code, this);
+        });
+      } else {
+        fallbackCopy(code, this);
+      }
+    });
+
+    function fallbackCopy(text, btn) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        btn.textContent = 'copied';
+        setTimeout(() => { btn.textContent = 'copy'; }, 1200);
+      } catch (e) {
+        btn.textContent = 'failed';
+        setTimeout(() => { btn.textContent = 'copy'; }, 1200);
+      }
+      document.body.removeChild(ta);
+    }
+
+    // 重置按钮
+    toolbar.querySelector('.reset-btn').addEventListener('click', function() {
+      cm.setValue(codeText);
+    });
+
+  });
+})();
+</script>
+<script>
+(function () {
+  const bar = document.getElementById('reading-progress');
+  if (!bar) return;
+
+  function updateProgress() {
+    const doc = document.documentElement;
+    const scrollTop = window.pageYOffset || doc.scrollTop || document.body.scrollTop || 0;
+    // 真实可滚动高度：只用 documentElement，不用 body（body 有 margin 会多算）
+    const maxScroll = Math.max(0, doc.scrollHeight - doc.clientHeight);
+
+    if (maxScroll <= 0) {
+      bar.style.width = '0%';
+      return;
+    }
+
+    // 滚到底判定：离底部 <= 2px 就算 100%，避免小数误差永远差一点
+    const remaining = maxScroll - scrollTop;
+    const percent = remaining <= 2 ? 100 : (scrollTop / maxScroll) * 100;
+    bar.style.width = percent + '%';
+  }
+
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress);
+  window.addEventListener('load', updateProgress);
+
+  // 编辑器初始化 / 字体加载后高度会变，多算几次
+  updateProgress();
+  setTimeout(updateProgress, 300);
+  setTimeout(updateProgress, 1000);
+  setTimeout(updateProgress, 2500);
+})();
+</script>
 </body>
 </html>
