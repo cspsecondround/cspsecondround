@@ -73,19 +73,20 @@ pre code {
   border-radius: 8px;
   overflow: hidden;
   background: #1e222a;
+  /* 高度由 JS 动态设置，这里不再限制 */
 }
 
-/* CodeMirror 编辑器容器 */
 .codemirror-wrapper {
   flex: 1;
-  min-height: 200px;
+  min-height: 0;          /* 关键：让 flex 子项能缩小到内容高度 */
   display: flex;
   flex-direction: column;
 }
+
 .codemirror-wrapper .CodeMirror {
   flex: 1;
   height: 100% !important;
-  font-family: 'Fira Code', 'SF Mono', Monaco, Consolas, monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, Consolas, monospace;
   font-size: 13px;
   background: #282c34;
   color: #abb2bf;
@@ -3521,7 +3522,7 @@ CodeMirror.registerHelper("hint", "cpp", function(cm) {
     // 工具栏
     const toolbar = document.createElement('div');
     toolbar.className = 'editor-toolbar';
-    toolbar.innerHTML = `<span class="editor-title">Editor</span>
+    toolbar.innerHTML = `<span class="editor-title">practice board</span>
       <span class="editor-actions">
         <button class="run-btn" title="copy code to clipboard">copy</button>
         <button class="reset-btn" title="reset to original code">reset</button>
@@ -3556,8 +3557,40 @@ CodeMirror.registerHelper("hint", "cpp", function(cm) {
       }
     });
 
-    // 设置内容
+        // 设置内容
     cm.setValue(codeText);
+
+    // ========== 高度自适应 + 左右等高 ==========
+    (function syncHeight(codeCol, cmCol, text, editor) {
+      if (!codeCol || !cmCol) return;
+
+      // 根据行数算一个最小高度兜底（短代码不留大片空白）
+      const lines = text.split('\n').length;
+      const minHeight = Math.min(Math.max(lines * 18 + 40, 120), 600);
+
+      function applyHeight() {
+        const preEl = codeCol.querySelector('pre');
+        const preHeight = preEl ? preEl.getBoundingClientRect().height : 0;
+        const target = Math.max(preHeight, minHeight);
+        cmCol.style.height = target + 'px';
+        editor.refresh();
+      }
+
+      applyHeight();
+      setTimeout(applyHeight, 0);
+
+      if (window.ResizeObserver) {
+        const ro = new ResizeObserver(applyHeight);
+        const preEl = codeCol.querySelector('pre');
+        if (preEl) ro.observe(preEl);
+      } else {
+        window.addEventListener('resize', applyHeight);
+      }
+
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(applyHeight);
+      }
+    })(row.querySelector('.code-col'), row.querySelector('.codemirror-col'), codeText, cm);
 
     // 自动弹出补全（在输入时）
     // 自动弹出补全（仅在用户键入字母/数字/下划线时触发）
