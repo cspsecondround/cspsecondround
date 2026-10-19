@@ -265,6 +265,40 @@ pre:hover .copy-btn { opacity: 1; }
   box-shadow: 0 0 8px rgba(88, 166, 255, 0.6);
   pointer-events: none;
 }
+/* 隐藏代码按钮 */
+.hide-btn {
+  position: absolute;
+  top: 8px;
+  right: 70px; 
+  padding: 4px 10px;
+  font-size: 12px;
+  font-family: -apple-system, sans-serif;
+  color: #8b949e;
+  background: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s, color 0.2s;
+  z-index: 10;
+}
+pre:hover .hide-btn { opacity: 1; }
+.hide-btn:hover { background: #30363d; color: #e6edf3; }
+
+/* 隐藏状态：代码文字透明，占位保留 */
+pre.code-hidden code,
+pre.code-hidden code * {
+  color: transparent !important;
+  text-shadow: none !important;
+  user-select: none;          /* 新增：禁止选中 */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+pre.code-hidden code::selection,
+pre.code-hidden code *::selection {
+  background: transparent;
+}
 </style>
 </head>
 <body>
@@ -3229,7 +3263,7 @@ vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">600
     '0 pts', 'Pending', 'Judging', 'Compiling', 'Running'
   ];
   document.addEventListener('click', function (e) {
-    if (e.target.closest('.copy-btn') || e.target.closest('#toc') || e.target.closest('.CodeMirror')) return;
+        if (e.target.closest('.copy-btn') || e.target.closest('.hide-btn') || e.target.closest('#toc') || e.target.closest('.CodeMirror')) return;
     const count = 18;
     for (let i = 0; i < count; i++) {
       const angle = (Math.PI * 2 * i) / count + Math.random() * 0.3;
@@ -3362,7 +3396,12 @@ vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">600
     const btn = document.createElement('button');
     btn.className = 'copy-btn';
     btn.textContent = 'copy';
-    btn.addEventListener('click', function () {
+        btn.addEventListener('click', function () {
+      if (pre.classList.contains('code-hidden')) {
+        btn.textContent = 'hidden';
+        setTimeout(function () { btn.textContent = 'copy'; }, 1200);
+        return;
+      }
       const code = pre.querySelector('code');
       const text = code ? code.innerText : pre.innerText;
       if (navigator.clipboard && window.isSecureContext) {
@@ -3387,6 +3426,17 @@ vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">600
       }
     });
     pre.appendChild(btn);
+        // ========== 隐藏代码按钮 ==========
+    if (!pre.querySelector('.hide-btn')) {
+      const hideBtn = document.createElement('button');
+      hideBtn.className = 'hide-btn';
+      hideBtn.textContent = 'hide';
+      hideBtn.addEventListener('click', function () {
+        const hidden = pre.classList.toggle('code-hidden');
+        hideBtn.textContent = hidden ? 'show' : 'hide';
+      });
+      pre.appendChild(hideBtn);
+    }
   });
 })();
 </script>
@@ -3568,12 +3618,17 @@ CodeMirror.registerHelper("hint", "cpp", function(cm) {
       const lines = text.split('\n').length;
       const minHeight = Math.min(Math.max(lines * 18 + 40, 120), 600);
 
+            let raf = null;
       function applyHeight() {
-        const preEl = codeCol.querySelector('pre');
-        const preHeight = preEl ? preEl.getBoundingClientRect().height : 0;
-        const target = Math.max(preHeight, minHeight);
-        cmCol.style.height = target + 'px';
-        editor.refresh();
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          raf = null;
+          const preEl = codeCol.querySelector('pre');
+          const preHeight = preEl ? preEl.getBoundingClientRect().height : 0;
+          const target = Math.max(preHeight, minHeight);
+          cmCol.style.height = target + 'px';
+          editor.refresh();
+        });
       }
 
       applyHeight();
@@ -3663,20 +3718,25 @@ CodeMirror.registerHelper("hint", "cpp", function(cm) {
   const bar = document.getElementById('reading-progress');
   if (!bar) return;
 
-  function updateProgress() {
+      function updateProgress() {
     const doc = document.documentElement;
     const scrollTop = window.pageYOffset || doc.scrollTop || document.body.scrollTop || 0;
-    // 真实可滚动高度：只用 documentElement，不用 body（body 有 margin 会多算）
-    const maxScroll = Math.max(0, doc.scrollHeight - doc.clientHeight);
+    const viewportH = doc.clientHeight;
 
+    // body 底边进视口（或已滚过）就算 100%，不受 scrollHeight 多算影响
+    const bodyBottom = document.body.getBoundingClientRect().bottom;
+    if (bodyBottom <= viewportH + 2) {
+      bar.style.width = '100%';
+      return;
+    }
+
+    const maxScroll = Math.max(0, doc.scrollHeight - viewportH);
     if (maxScroll <= 0) {
       bar.style.width = '0%';
       return;
     }
 
-    // 滚到底判定：离底部 <= 2px 就算 100%，避免小数误差永远差一点
-    const remaining = maxScroll - scrollTop;
-    const percent = remaining <= 2 ? 100 : (scrollTop / maxScroll) * 100;
+    const percent = Math.min(100, (scrollTop / maxScroll) * 100);
     bar.style.width = percent + '%';
   }
 
