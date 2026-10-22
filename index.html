@@ -23,9 +23,37 @@ body {
     margin-right: 0;
   }
 }
-h1,h2,h3,h4,h5,h6 { margin-top: 24px; margin-bottom: 12px; color: #e6edf3; }
-h1 { font-size: 2em; border-bottom: 2px solid #30363d; padding-bottom: 8px; }
-h2 { font-size: 1.6em; border-bottom: 1px solid #30363d; padding-bottom: 6px; }
+/* ========== 标题文字颜色：逐级由青变蓝（加速版） ========== */
+h1, h2, h3, h4, h5, h6 { 
+  margin-top: 24px; 
+  margin-bottom: 12px; 
+}
+h1 { color: #5ed6cb; } /* 纯青色 */
+h2 { color: #5fd2e0; } /* 明显偏蓝一点 */
+h3 { color: #64c4f5; } /* 浅青蓝 */
+h4 { color: #6db2fa; } /* 偏蓝 */
+h5 { color: #73a6ff; } /* 很蓝 */
+h6 { color: #79b8ff; } /* 纯蓝 (与链接色一致) */
+
+/* ========== 标题下方的渐变线（蓝 -> 青 -> 消失） ========== */
+h1, h2 {
+  padding-bottom: 6px;
+  border-bottom: none;
+  position: relative;
+}
+h1::after, h2::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 2px;
+  margin-top: 8px;
+  /* 核心：蓝 -> 青 -> 透明 */
+  background: linear-gradient(90deg, #79b8ff, #5ed6cb 30%, rgba(94,214,203,0) 80%);
+  border-radius: 1px;
+}
+h2::after {
+  height: 1px;
+}
 
 code {
   background: #282c34;
@@ -35,14 +63,16 @@ code {
   font-family: SF Mono, Fira Code, Monaco, Consolas, monospace;
   font-size: 0.9em;
 }
+
+/* ========== 代码块（pre）无边框配置 ========== */
 pre {
   background: #282c34;
   padding: 16px;
   border-radius: 8px;
   overflow-x: auto;
-  border: 1px solid #3e4451;
+  border: none; /* 去掉边框 */
   position: relative;
-  margin: 0; /* 与编辑器并排时去掉默认边距 */
+  margin: 0;
 }
 pre code {
   background: transparent;
@@ -69,11 +99,10 @@ pre code {
   min-width: 300px;
   display: flex;
   flex-direction: column;
-  border: 1px solid #3e4451;
+  border: none; /* 去掉边框 */
   border-radius: 8px;
   overflow: hidden;
   background: #1e222a;
-  /* 高度由 JS 动态设置，这里不再限制 */
 }
 
 .codemirror-wrapper {
@@ -299,6 +328,26 @@ pre.code-hidden code::selection,
 pre.code-hidden code *::selection {
   background: transparent;
 }
+pre.code-hidden code::selection,
+pre.code-hidden code *::selection {
+  background: transparent;
+}
+
+/* ========== 主题色统一（青色系） ========== */
+a { color: #79b8ff; } /* 偏蓝的青色 */
+a:hover { color: #5ed6cb; } /* 纯青色 */
+#toc a:hover { color: #5ed6cb; }
+#toc .toc-h1 { color: #5ed6cb; }
+#reading-progress {
+  /* 蓝 -> 青 */
+  background: linear-gradient(90deg, #79b8ff, #5ed6cb);
+  box-shadow: 0 0 8px rgba(94, 214, 203, 0.6);
+}
+blockquote { border-left: 4px solid #5ed6cb; }
+.editor-toolbar .editor-title { color: #5ed6cb; }
+/* 让右键菜单/光标之类的颜色也变 */
+.CodeMirror-cursor { border-left-color: #5ed6cb !important; }
+
 </style>
 </head>
 <body>
