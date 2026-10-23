@@ -121,6 +121,24 @@ pre code {
   color: #abb2bf;
   border: none;
 }
+/* 未激活的 practice board 占位面板 */
+.cm-placeholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #282c34;
+  color: #5c6370;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 13px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s, color 0.2s;
+}
+.cm-placeholder:hover {
+  background: #2f343f;
+  color: #79b8ff;
+}
 .CodeMirror-gutters {
   background: #21252b !important;
   border-right: 1px solid #3e4451 !important;
@@ -350,6 +368,14 @@ blockquote { border-left: 4px solid #5ed6cb; }
 
 </style>
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- highlight.js：只引 core + cpp，不引官方主题，配色仍用页面自带的 .hljs-* -->
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/core.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/cpp.min.js"></script>
+<script>
+  if (typeof hljs !== 'undefined' && typeof hljsDefineCpp !== 'undefined') {
+    hljs.registerLanguage('cpp', hljsDefineCpp);
+  }
+</script>
 </head>
 <body>
 <div id="reading-progress"></div>
@@ -3238,17 +3264,60 @@ vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">600
   <p>本文为 <a href="https://www.cnblogs.com/Accepted01/">Accepted01</a> 原创。主站为 cspsecondround.github.io，博客园为同步更新。GitHub 上名字 Accepted01 已被占用，故主站用 cspsecondround 命名，并非他人转载。其他平台未经授权禁止转载。</p>
 </blockquote>
 <!-- ================= 正文内容结束 ================= -->
+<!-- ========== hljs：把静态 span 还原成纯文本，再真跑一次高亮 ========== -->
+<script>
+(function () {
+  function rehighlightAll() {
+    if (typeof hljs === 'undefined') return;
+    document.querySelectorAll('pre > code').forEach(function (codeEl) {
+      // 先取纯文本，把已有 span 全清掉（防止重复高亮叠层）
+      var raw = codeEl.textContent;
+      codeEl.textContent = raw;
+      // 去掉旧的 hljs / language-* 标记
+      codeEl.className = codeEl.className
+        .replace(/\bhljs\b/g, '')
+        .replace(/\blanguage-\w+\b/g, '')
+        .trim();
+      codeEl.classList.add('hljs');
+      // 站点全是 C++，强制 cpp，比 auto-detect 稳
+      hljs.highlightElement(codeEl);
+    });
+  }
 
+  // hljs 是 CDN 异步加载，等它好了再跑
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', rehighlightAll);
+  } else {
+    rehighlightAll();
+  }
+  // 兜底：CDN 慢时 load 后再跑一次
+  window.addEventListener('load', rehighlightAll);
+})();
+</script>
 <!-- ========== 特效 1：canvas-nest 星空连线（定制深蓝长线版） ========== -->
 <script type="text/javascript">
 !function(){
   var CONFIG_COLOR = "47,135,193";
   var CONFIG_OPACITY = 0.8;
-  var CONFIG_COUNT = 125;
+  var CONFIG_COUNT = 99;
   var CONFIG_MAX = 20000;
-  var CONFIG_MOUSE_MAX = 10000;
+  var CONFIG_MOUSE_MAX = 5000;
 
-  function o(){ a=m.width=window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth, c=m.height=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight; }
+  var prevA = 0, prevC = 0;
+  function o(){
+    prevA = a || window.innerWidth;
+    prevC = c || window.innerHeight;
+    a = m.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    c = m.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    // 粒子按比例重映射到新画布，避免窗口拉大后粒子挤在旧区域
+    if (s && s.length && prevA && prevC) {
+      var rx = a / prevA, ry = c / prevC;
+      for (var i = 0; i < s.length; i++) {
+        s[i].x *= rx;
+        s[i].y *= ry;
+      }
+    }
+  }
   function i(){
     r.clearRect(0,0,a,c);
     var n,e,t,o,m,l;
@@ -3282,9 +3351,9 @@ vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">600
   document.getElementsByTagName("body")[0].appendChild(m);
   
   o();
-  window.onresize=o;
-  window.onmousemove=function(n){ n=n||window.event; y.x=n.clientX; y.y=n.clientY; };
-  window.onmouseout=function(){ y.x=null; y.y=null; };
+  window.addEventListener('resize', o);
+  window.addEventListener('mousemove', function(n){ n=n||window.event; y.x=n.clientX; y.y=n.clientY; }, { passive: true });
+  window.addEventListener('mouseout', function(){ y.x=null; y.y=null; });
 
   for(var s=[], f=0; f<CONFIG_COUNT; f++){
     var h=w()*a, g=w()*c, v=2*w()-1, p=2*w()-1;
@@ -3326,6 +3395,7 @@ vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">600
         life: 1
       });
     }
+    if (rafId === null) { rafId = requestAnimationFrame(animate); }
     const textEl = document.createElement('span');
     textEl.textContent = TEXTS[Math.floor(Math.random() * TEXTS.length)];
     textEl.style.cssText = `
@@ -3343,8 +3413,13 @@ vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">600
     });
     setTimeout(() => textEl.remove(), 1300);
   });
+  let rafId = null;
   function animate() {
     ctx.clearRect(0, 0, W, H);
+    if (particles.length === 0) {
+      rafId = null;
+      return;
+    }
     for (let i = particles.length - 1; i >= 0; i--) {
       const p = particles[i];
       p.x += p.vx; p.y += p.vy;
@@ -3356,9 +3431,8 @@ vector&lt;<span class="hljs-type">int</span>&gt; g[<span class="hljs-number">600
       ctx.fillStyle = p.color; ctx.fill();
     }
     ctx.globalAlpha = 1;
-    requestAnimationFrame(animate);
+    rafId = requestAnimationFrame(animate);
   }
-  animate();
 })();
 </script>
 
@@ -3590,176 +3664,153 @@ CodeMirror.registerHelper("hint", "cpp", function(cm) {
   };
 });
 </script>
-
 <script>
 (function() {
-  // 给每个代码块创建并排编辑器
+  // 每个代码块先建并排结构 + 右侧占位面板；点占位才真正建空的 CodeMirror
   const codeBlocks = document.querySelectorAll('pre > code');
+
+  // ===== 全局 ResizeObserver：所有激活的块共用，一次 rAF 批量刷 =====
+  const activeBlocks = [];   // { cmCol, codeCol, cm, minHeight, applyHeight }
+  let batchRaf = null;
+  function flushAllHeights() {
+    if (batchRaf) return;
+    batchRaf = requestAnimationFrame(() => {
+      batchRaf = null;
+      for (let i = 0; i < activeBlocks.length; i++) {
+        activeBlocks[i].applyHeight();
+      }
+    });
+  }
+  const globalRO = new ResizeObserver(flushAllHeights);
 
   codeBlocks.forEach(function(codeEl) {
     const pre = codeEl.closest('pre');
-    // 如果已经处理过就跳过
     if (pre.closest('.editor-row')) return;
 
-    // 获取原始代码文本
+    // 一次性取好文本，仅用于按行数估算占位高度，避免激活前后布局跳动
     const codeText = codeEl.innerText;
 
-    // 创建外层并排容器
     const row = document.createElement('div');
     row.className = 'editor-row';
 
-    // 左侧：原有的 pre（包裹）
     const codeCol = document.createElement('div');
     codeCol.className = 'code-col';
     pre.parentNode.insertBefore(row, pre);
     codeCol.appendChild(pre);
     row.appendChild(codeCol);
 
-    // 右侧：CodeMirror 编辑器容器
     const cmCol = document.createElement('div');
     cmCol.className = 'codemirror-col';
 
-    // 工具栏
-    const toolbar = document.createElement('div');
-    toolbar.className = 'editor-toolbar';
-    toolbar.innerHTML = `<span class="editor-title">practice board</span>
-      <span class="editor-actions">
-        <button class="run-btn" title="copy code to clipboard">copy</button>
-        <button class="reset-btn" title="reset to original code">reset</button>
-      </span>`;
-    cmCol.appendChild(toolbar);
-
-    // 编辑器包裹
-    const wrapper = document.createElement('div');
-    wrapper.className = 'codemirror-wrapper';
-    const textarea = document.createElement('textarea');
-    wrapper.appendChild(textarea);
-    cmCol.appendChild(wrapper);
+    // 占位面板
+    const placeholder = document.createElement('div');
+    placeholder.className = 'cm-placeholder';
+    placeholder.textContent = 'click to practice';
+    cmCol.appendChild(placeholder);
     row.appendChild(cmCol);
 
-    // 初始化 CodeMirror
-    const cm = CodeMirror.fromTextArea(textarea, {
-      lineNumbers: true,
-      mode: 'text/x-c++src',
-      theme: 'dracula',
-      indentUnit: 4,
-      tabSize: 4,
-      lineWrapping: true,
-      matchBrackets: true,
-      autoCloseBrackets: true,
-      extraKeys: {
-        "Ctrl-Space": "autocomplete",
-        "Cmd-Space": "autocomplete"
-      },
-      hintOptions: {
-        hint: CodeMirror.hint.cpp,
-        completeSingle: false
-      }
-    });
+    // 占位高度直接用左侧 pre 的实际高度，跟左侧严丝合缝
+    const preRect = pre.getBoundingClientRect();
+    const minHeight = Math.max(preRect.height, 120);
+    cmCol.style.height = minHeight + 'px';
+    // 字体加载完再量一次，防止 fallback 字体导致高度偏小
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () {
+        const h = pre.getBoundingClientRect().height;
+        if (h > 0) cmCol.style.height = Math.max(h, 120) + 'px';
+      });
+    }
 
-        // 设置内容
-    cm.setValue(codeText);
+    let activated = false;
 
-    // ========== 高度自适应 + 左右等高 ==========
-    (function syncHeight(codeCol, cmCol, text, editor) {
-      if (!codeCol || !cmCol) return;
+    placeholder.addEventListener('click', function() {
+      if (activated) return;
+      activated = true;
 
-      // 根据行数算一个最小高度兜底（短代码不留大片空白）
-      const lines = text.split('\n').length;
-      const minHeight = Math.min(Math.max(lines * 18 + 40, 120), 600);
+      placeholder.remove();
 
-            let raf = null;
+      // 工具栏：只留 practice board
+      const toolbar = document.createElement('div');
+      toolbar.className = 'editor-toolbar';
+      toolbar.innerHTML = `<span class="editor-title">practice board</span>`;
+      cmCol.appendChild(toolbar);
+
+      // 编辑器包裹
+      const wrapper = document.createElement('div');
+      wrapper.className = 'codemirror-wrapper';
+      const textarea = document.createElement('textarea');
+      wrapper.appendChild(textarea);
+      cmCol.appendChild(wrapper);
+
+      // 初始化 CodeMirror
+      const cm = CodeMirror.fromTextArea(textarea, {
+        lineNumbers: true,
+        mode: 'text/x-c++src',
+        theme: 'dracula',
+        indentUnit: 4,
+        tabSize: 4,
+        lineWrapping: true,
+        matchBrackets: true,
+        autoCloseBrackets: true,
+        extraKeys: {
+          "Ctrl-Space": "autocomplete",
+          "Cmd-Space": "autocomplete"
+        },
+        hintOptions: {
+          hint: CodeMirror.hint.cpp,
+          completeSingle: false
+        }
+      });
+
+      // 练习板默认空白，不填左侧代码
+      cm.setValue("");
+
+      // 单个块的高度计算（纯计算，不自己包 rAF，由全局 flush 统一调度）
       function applyHeight() {
-        if (raf) return;
-        raf = requestAnimationFrame(() => {
-          raf = null;
-          const preEl = codeCol.querySelector('pre');
-          const preHeight = preEl ? preEl.getBoundingClientRect().height : 0;
-          const target = Math.max(preHeight, minHeight);
-          cmCol.style.height = target + 'px';
-          editor.refresh();
-        });
+        const preEl = codeCol.querySelector('pre');
+        const preHeight = preEl ? preEl.getBoundingClientRect().height : 0;
+        const toolbarEl = cmCol.querySelector('.editor-toolbar');
+        const toolbarHeight = toolbarEl ? toolbarEl.getBoundingClientRect().height : 0;
+        const total = Math.max(preHeight, minHeight);
+        cmCol.style.height = total + 'px';
+
+        const cmEl = cmCol.querySelector('.CodeMirror');
+        if (cmEl) {
+          cmEl.style.height = Math.max(total - toolbarHeight, 60) + 'px';
+        }
+        cm.refresh();
       }
 
+      // 首次同步
       applyHeight();
       setTimeout(applyHeight, 0);
 
-      if (window.ResizeObserver) {
-        const ro = new ResizeObserver(applyHeight);
-        const preEl = codeCol.querySelector('pre');
-        if (preEl) ro.observe(preEl);
-      } else {
-        window.addEventListener('resize', applyHeight);
-      }
+      // 注册到全局池：以后全局 ResizeObserver 触发时一起刷
+      activeBlocks.push({ cmCol: cmCol, codeCol: codeCol, cm: cm, minHeight: minHeight, applyHeight: applyHeight });
+      globalRO.observe(pre);
 
       if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(applyHeight);
       }
-    })(row.querySelector('.code-col'), row.querySelector('.codemirror-col'), codeText, cm);
 
-    // 自动弹出补全（在输入时）
-    // 自动弹出补全（仅在用户键入字母/数字/下划线时触发）
-    cm.on("inputRead", function(instance, changeObj) {
-    // 弹窗已打开时不重复触发，防止闪烁/卡死
-    if (instance.state.completionActive) return;
+      // 自动补全
+      cm.on("inputRead", function(instance, changeObj) {
+        if (instance.state.completionActive) return;
+        if (changeObj.origin && changeObj.origin !== "+input") return;
+        const ch = changeObj.text[changeObj.text.length - 1];
+        if (!ch) return;
+        if (!/[a-zA-Z0-9_]/.test(ch)) return;
+        const cur = instance.getCursor();
+        const line = instance.getLine(cur.line);
+        const before = line.slice(0, cur.ch);
+        if (!/[a-zA-Z0-9_#]$/.test(before)) return;
+        instance.showHint({ hint: CodeMirror.hint.cpp, completeSingle: false });
+      });
 
-    // 只处理键盘输入，过滤粘贴/撤销/拖拽
-    if (changeObj.origin && changeObj.origin !== "+input") return;
-
-    // 取最后一个输入字符
-    const ch = changeObj.text[changeObj.text.length - 1];
-    if (!ch) return;
-
-    // 只在输入字母、数字、下划线时触发（不再响应 > 和 .）
-    if (!/[a-zA-Z0-9_]/.test(ch)) return;
-
-    // 光标前必须紧邻标识符字符，避免行中空格后乱弹
-    const cur = instance.getCursor();
-    const line = instance.getLine(cur.line);
-    const before = line.slice(0, cur.ch);
-    if (!/[a-zA-Z0-9_#]$/.test(before)) return;
-
-    instance.showHint({ hint: CodeMirror.hint.cpp, completeSingle: false });
+      // 激活后聚焦，用户点了就能直接打字
+      cm.focus();
+      cm.refresh();
     });
-
-    // 复制按钮
-    toolbar.querySelector('.run-btn').addEventListener('click', function() {
-      const code = cm.getValue();
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(code).then(() => {
-          this.textContent = 'copied';
-          setTimeout(() => { this.textContent = 'copy'; }, 1200);
-        }).catch(() => {
-          fallbackCopy(code, this);
-        });
-      } else {
-        fallbackCopy(code, this);
-      }
-    });
-
-    function fallbackCopy(text, btn) {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      try {
-        document.execCommand('copy');
-        btn.textContent = 'copied';
-        setTimeout(() => { btn.textContent = 'copy'; }, 1200);
-      } catch (e) {
-        btn.textContent = 'failed';
-        setTimeout(() => { btn.textContent = 'copy'; }, 1200);
-      }
-      document.body.removeChild(ta);
-    }
-
-    // 重置按钮
-    toolbar.querySelector('.reset-btn').addEventListener('click', function() {
-      cm.setValue(codeText);
-    });
-
   });
 })();
 </script>
@@ -3834,37 +3885,31 @@ CodeMirror.registerHelper("hint", "cpp", function(cm) {
       };
 
       fixStyle();
-      setTimeout(fixStyle, 500); // 防止插件延迟加载
+      setTimeout(fixStyle, 300);
+      setTimeout(fixStyle, 800);
       setTimeout(fixStyle, 1500);
-      
-      // 监听 DOM 结构变化
-      const observer = new MutationObserver(fixStyle);
-      observer.observe(document.body, { childList: true, subtree: true });
+      // 不再常驻监听 body 子树：选中代码时 CodeMirror 的 DOM 变动会疯狂触发它
     }
   };
   document.body.appendChild(script);
 })();
 </script>
-<!-- ========== 自定义青蓝色光标（稳定输入框判定版） ========== -->
+<!-- ========== 自定义青蓝色光标（平滑插值丝滑版） ========== -->
 <style>
-  /* 全局隐藏鼠标，但注意我们马上会放开特定区域 */
   html, body {
     cursor: none !important;
   }
 
-  /* 自定义光标容器 */
   #custom-cursor {
     position: fixed;
     top: 0;
     left: 0;
     pointer-events: none;
     z-index: 100000;
-    transform: translate(-50%, -50%);
+    /* 注意：这里去掉 translate(-50%, -50%)，交给 JS 动态计算，否则会叠加位移偏移 */
     opacity: 1;
-    transition: opacity 0.2s ease;
   }
 
-  /* 外层圆角方框 */
   #cursor-ring {
     position: absolute;
     top: 50%;
@@ -3878,7 +3923,6 @@ CodeMirror.registerHelper("hint", "cpp", function(cm) {
     transition: all 0.3s ease-in-out;
   }
 
-  /* 内层小方点 */
   #cursor-dot {
     position: absolute;
     top: 50%;
@@ -3891,7 +3935,6 @@ CodeMirror.registerHelper("hint", "cpp", function(cm) {
     transition: all 0.3s ease-in-out;
   }
 
-  /* 普通点击状态（放大、变透明） */
   #custom-cursor.clicking #cursor-dot {
     transform: translate(-50%, -50%) scale(3);
     opacity: 0.6;
@@ -3905,7 +3948,6 @@ CodeMirror.registerHelper("hint", "cpp", function(cm) {
     transition: all 0.3s ease-out;
   }
   
-  /* 当你进入输入框或代码编辑器时，强制显示系统原生光标 */
   textarea, input, .CodeMirror, .CodeMirror * {
     cursor: text !important;
   }
@@ -3917,31 +3959,46 @@ CodeMirror.registerHelper("hint", "cpp", function(cm) {
 </div>
 
 <script>
+  // 参考 blog-effect.js 的平滑插值算法
   (function() {
     const cursor = document.getElementById('custom-cursor');
-
-    // 初始化位置
-    cursor.style.left = window.innerWidth / 2 + 'px';
-    cursor.style.top = window.innerHeight / 2 + 'px';
-
-    // 鼠标移动
+    
+    // 初始化鼠标位置和光标位置
+    let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+    let cursorX = mouseX, cursorY = mouseY;
+    
+    // 监听移动
     document.addEventListener('mousemove', function(e) {
-      requestAnimationFrame(() => {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top = e.clientY + 'px';
-      });
-
-      // 核心判定：仅仅判断鼠标是否在输入框或编辑器内部
+      mouseX = e.clientX; 
+      mouseY = e.clientY;
       const isInput = e.target.closest('textarea, input, .CodeMirror');
-      
-      if (isInput) {
-        // 在输入框里：隐藏自定义光标，露出系统光标
-        cursor.style.opacity = '0';
-      } else {
-        // 在其他地方：显示自定义光标
-        cursor.style.opacity = '1';
-      }
+      cursor.style.opacity = isInput ? '0' : '1';
+      startCursorLoop();   // 鼠标动了就唤醒循环，停了自动退出
     }, { passive: true });
+
+    // 渲染循环：鼠标动了才跑，停下来后自动退出，不再空转 rAF
+    let cursorRaf = null;
+    let lastX = mouseX, lastY = mouseY;
+    function renderCursor() {
+      cursorX += (mouseX - cursorX) * 0.6;
+      cursorY += (mouseY - cursorY) * 0.6;
+      cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+
+      // 离目标足够近且鼠标没再动，就停掉 rAF
+      const settled = Math.abs(mouseX - cursorX) < 0.1 && Math.abs(mouseY - cursorY) < 0.1;
+      const moved = mouseX !== lastX || mouseY !== lastY;
+      lastX = mouseX; lastY = mouseY;
+
+      if (settled && !moved) {
+        cursorRaf = null;
+        return;
+      }
+      cursorRaf = requestAnimationFrame(renderCursor);
+    }
+    function startCursorLoop() {
+      if (cursorRaf === null) cursorRaf = requestAnimationFrame(renderCursor);
+    }
+    startCursorLoop();
 
     // 按下/松开
     document.addEventListener('mousedown', function() {
