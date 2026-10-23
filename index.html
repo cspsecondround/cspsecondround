@@ -349,6 +349,7 @@ blockquote { border-left: 4px solid #5ed6cb; }
 .CodeMirror-cursor { border-left-color: #5ed6cb !important; }
 
 </style>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
 <div id="reading-progress"></div>
@@ -3799,6 +3800,165 @@ CodeMirror.registerHelper("hint", "cpp", function(cm) {
   setTimeout(updateProgress, 1000);
   setTimeout(updateProgress, 2500);
 })();
+</script>
+<!-- ========== 水车鼠标特效（穿透目录 + 全屏显示） ========== -->
+<script>
+(function() {
+  // 移动端/触摸屏不加载
+  if (window.matchMedia("(pointer: coarse)").matches) return;
+
+  const script = document.createElement('script');
+  script.src = "https://cdn.jsdelivr.net/gh/shuiche-it/cnblog-mouse@master/dist/mouse.min.js";
+  script.onload = function() {
+    if (typeof $.shuicheMouse === 'function') {
+      $.shuicheMouse({ type: 11, color: false });
+      
+      // 持续监控并调整画布和目录的层级
+      const fixStyle = () => {
+        // 1. 让水车画布盖在目录上方，但鼠标可以穿透
+        document.querySelectorAll('canvas').forEach(c => {
+          if (c.id !== 'clickCanvas' && c.id !== 'c_n') {
+            c.style.zIndex = '10005'; // 必须大于 #toc 的 9997
+            c.style.pointerEvents = 'none';
+          }
+        });
+        
+        // 2. 把自动目录的背景变成半透明（或者毛玻璃），并允许鼠标穿透
+        const toc = document.getElementById('toc');
+        if (toc) {
+          toc.style.background = 'rgba(28, 33, 40, 0.6)'; // 半透明
+          toc.style.backdropFilter = 'blur(4px)';         // 毛玻璃效果更高级
+          // 注意：目录里的 a 标签还需要点击，所以整个目录不能用 pointer-events: none
+          // 我们让目录透明后，特效自然就在它“上面”和“里面”都能看见了
+        }
+      };
+
+      fixStyle();
+      setTimeout(fixStyle, 500); // 防止插件延迟加载
+      setTimeout(fixStyle, 1500);
+      
+      // 监听 DOM 结构变化
+      const observer = new MutationObserver(fixStyle);
+      observer.observe(document.body, { childList: true, subtree: true });
+    }
+  };
+  document.body.appendChild(script);
+})();
+</script>
+<!-- ========== 自定义青蓝色光标（稳定输入框判定版） ========== -->
+<style>
+  /* 全局隐藏鼠标，但注意我们马上会放开特定区域 */
+  html, body {
+    cursor: none !important;
+  }
+
+  /* 自定义光标容器 */
+  #custom-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 100000;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    transition: opacity 0.2s ease;
+  }
+
+  /* 外层圆角方框 */
+  #cursor-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    width: 38px;
+    height: 38px;
+    border: 2px solid #79b8ff;
+    border-radius: 10px; 
+    box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
+  }
+
+  /* 内层小方点 */
+  #cursor-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background-color: #5ed6cb;
+    border-radius: 2px; 
+    transition: all 0.3s ease-in-out;
+  }
+
+  /* 普通点击状态（放大、变透明） */
+  #custom-cursor.clicking #cursor-dot {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0.6;
+    transition: all 0.15s ease-out; 
+  }
+  #custom-cursor.clicking #cursor-ring {
+    border-width: 1px;
+    border-color: #5ed6cb; 
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 0.6;
+    transition: all 0.3s ease-out;
+  }
+  
+  /* 当你进入输入框或代码编辑器时，强制显示系统原生光标 */
+  textarea, input, .CodeMirror, .CodeMirror * {
+    cursor: text !important;
+  }
+</style>
+
+<div id="custom-cursor">
+  <div id="cursor-ring"></div>
+  <div id="cursor-dot"></div>
+</div>
+
+<script>
+  (function() {
+    const cursor = document.getElementById('custom-cursor');
+
+    // 初始化位置
+    cursor.style.left = window.innerWidth / 2 + 'px';
+    cursor.style.top = window.innerHeight / 2 + 'px';
+
+    // 鼠标移动
+    document.addEventListener('mousemove', function(e) {
+      requestAnimationFrame(() => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+      });
+
+      // 核心判定：仅仅判断鼠标是否在输入框或编辑器内部
+      const isInput = e.target.closest('textarea, input, .CodeMirror');
+      
+      if (isInput) {
+        // 在输入框里：隐藏自定义光标，露出系统光标
+        cursor.style.opacity = '0';
+      } else {
+        // 在其他地方：显示自定义光标
+        cursor.style.opacity = '1';
+      }
+    }, { passive: true });
+
+    // 按下/松开
+    document.addEventListener('mousedown', function() {
+      cursor.classList.add('clicking');
+    });
+    document.addEventListener('mouseup', function() {
+      cursor.classList.remove('clicking');
+    });
+
+    // 离开页面
+    document.addEventListener('mouseleave', function() {
+      cursor.style.opacity = '0';
+    });
+    document.addEventListener('mouseenter', function() {
+      cursor.style.opacity = '1';
+    });
+  })();
 </script>
 </body>
 </html>
